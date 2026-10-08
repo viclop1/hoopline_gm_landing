@@ -23,7 +23,7 @@ LEGAL_BASE = "https://viclop1.github.io/hoopline-gm-legal"
 LEGAL = {
     "privacy": LEGAL_BASE + "/",
     "terms": LEGAL_BASE + "/terms.html",
-    "support": "mailto:hooplinegm@gmail.com",
+    "support": LEGAL_BASE + "/support.html",
 }
 
 LANGS = ["en", "es", "de", "fr"]
@@ -251,7 +251,9 @@ def head_common(lang, title, desc, canonical, extra=""):
 <meta name="description" content="{e(desc)}">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0D1014">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/inter-display-800.woff" as="font" type="font/woff" crossorigin>
 <link rel="preload" href="/assets/fonts/inter-400.woff" as="font" type="font/woff" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
@@ -364,10 +366,11 @@ for l in LANGS:
     w(("" if l == "en" else l + "/") + "index.html", landing(l))
 
 # ----------------------------------------------------------------- /auth/confirm
+AUTH_HEAD = head_common("en", "Hoopline GM", "Hoopline GM", SITE + "/auth/confirm/", '<meta name="robots" content="noindex, nofollow">\n<meta name="referrer" content="no-referrer">')
 confirm_html = f'''<!doctype html>
 <html lang="en">
 <head>
-{head_common("en", "Hoopline GM", "Hoopline GM", SITE + "/auth/confirm/", '<meta name="robots" content="noindex, nofollow">\n<meta name="referrer" content="no-referrer">')}</head>
+{AUTH_HEAD}</head>
 <body class="auth">
 <header class="top wrap"><a class="brand" href="/">Hoopline GM</a></header>
 <main class="auth-main wrap">
@@ -610,5 +613,4 @@ w("_headers", f"""/*
   Cache-Control: no-store
   X-Robots-Tag: noindex
 """)
-w("favicon.svg", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#8B7BFF"/><path d="M19 15h8v14h10V15h8v34h-8V36H27v13h-8z" fill="#0D1014"/></svg>\n')
 print("ok")
