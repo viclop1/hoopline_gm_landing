@@ -50,3 +50,9 @@ en el pie. Los textos salen de `aso-listing.md` (Project APP NBA) y están revis
 - Aviso legal / Impressum: consultarlo con el abogado (hay versión en alemán).
 - ~~Favicon~~ hecho: icono de la app. Para cambiarlo, sustituye `tools/app-icon-1024.png` y ejecuta `python3 tools/make_icons.py`.
 - Los textos y capturas son de la 1.0.1: comprobar que está aprobada en App Store.
+
+## Aviso legal / Impressum
+
+Aprobado por el abogado el 08/10/2026. El contenido está en `legalnotice.py` y `build.py` genera `/legal/`, `/es/legal/`, `/de/legal/` y `/fr/legal/`, con el enlace en el pie, el sitemap y el hreflang. Para generar la web sin ellos: `HOOPLINE_LEGAL_LIVE=0 python3 build.py`. Texto aprobado en Word: `legal-drafts/`.
+
+El apartado de la web de la política de privacidad (sección 8) está en el repo `hoopline-gm-legal` y en `legal/index.html` del repo de la app, y como referencia en `legalnotice.py` (`PRIVACY_WEB_SECTION`).
