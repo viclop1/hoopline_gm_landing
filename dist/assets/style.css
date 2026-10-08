@@ -65,8 +65,8 @@ h3 { font: 600 1.125rem/1.35 var(--body); }
 }
 
 /* secciones */
-.open, .do, .shots, .faq, .end, .foot { background: linear-gradient(var(--line), var(--line)) center top / calc(100% - 2 * var(--pad)) 1px no-repeat; }
-.open, .do, .shots, .faq, .end { padding-block: clamp(56px, 9vw, 112px); }
+.open, .do, .feats, .shots, .faq, .end, .foot { background: linear-gradient(var(--line), var(--line)) center top / calc(100% - 2 * var(--pad)) 1px no-repeat; }
+.open, .do, .feats, .shots, .faq, .end { padding-block: clamp(56px, 9vw, 112px); }
 .open h2 { max-width: 24ch; }
 .pillars { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(36px, 5vw, 56px); }
 .pillars li { padding-inline: 28px; border-left: 1px solid var(--line); }
@@ -84,7 +84,15 @@ h3 { font: 600 1.125rem/1.35 var(--body); }
 .fair-body p { color: var(--soft); }
 .fair-body h3 { margin-top: 32px; margin-bottom: 8px; }
 
-.shot-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); margin-top: clamp(32px, 5vw, 56px); }
+.feats { display: grid; gap: clamp(64px, 10vw, 128px); }
+.feat { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(28px, 6vw, 96px); }
+.feat-text { max-width: 30rem; }
+.feat-text p { margin-top: 16px; color: var(--soft); font-size: 1.125rem; }
+.feat-phone { justify-self: center; width: min(100%, 320px); }
+.feat-phone img { width: 100%; height: auto; }
+.feat-r .feat-phone { order: -1; }
+
+.shot-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 780px; gap: clamp(20px, 3vw, 40px); margin-top: clamp(32px, 5vw, 56px); }
 .shot img { width: 100%; }
 .shot figcaption { display: grid; gap: 4px; margin-top: 20px; max-width: 30ch; }
 .shot figcaption strong { font-weight: 600; }
@@ -133,6 +141,9 @@ h3 { font: 600 1.125rem/1.35 var(--body); }
   .pillars li, .pillars li:first-child { padding: 24px 0; border-left: 0; border-top: 1px solid var(--line); }
   .pillars li:first-child { border-top: 0; padding-top: 0; }
   .do, .faq, .fair-in { grid-template-columns: 1fr; }
+  .feat { grid-template-columns: 1fr; gap: 28px; }
+  .feat-r .feat-phone { order: 0; }
+  .feat-phone { width: min(78%, 300px); }
   .shot-row { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; margin-inline: calc(-1 * var(--pad)); padding-inline: var(--pad); scroll-padding-inline: var(--pad); }
   .shot { flex: 0 0 min(72vw, 300px); scroll-snap-align: start; }
 }
