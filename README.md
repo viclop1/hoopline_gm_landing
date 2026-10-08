@@ -21,7 +21,7 @@ tools/make_assets.py  regenera fuentes, capturas y la imagen para redes (solo si
 3. Para verlo en local: `cd dist && python3 -m http.server 8000` y abre http://localhost:8000
 4. Publica el contenido de `dist/` (ver abajo).
 
-`build.py` reescribe los `index.html`, `404.html`, `auth/confirm/index.html`, `assets/confirm.js`, `robots.txt`, `sitemap.xml`, `_headers` y `favicon.svg`.
+`build.py` reescribe los `index.html`, `404.html`, `auth/confirm/index.html`, `assets/confirm.js`, `robots.txt`, `sitemap.xml`, `_headers`.
 No toca `assets/style.css`, `fonts` ni `img`.
 
 ## Publicación (Cloudflare, proyecto `hooplinegm`)
@@ -48,5 +48,5 @@ en el pie. Los textos salen de `aso-listing.md` (Project APP NBA) y están revis
 ## Pendiente
 - Soporte: el pie enlaza a `mailto:hooplinegm@gmail.com`; confirmar si debe haber una página de soporte (`LEGAL["support"]` y `help_a` en `build.py`).
 - Aviso legal / Impressum: consultarlo con el abogado (hay versión en alemán).
-- Sustituir `dist/favicon.svg` (provisional) por el icono de la app.
+- ~~Favicon~~ hecho: icono de la app. Para cambiarlo, sustituye `tools/app-icon-1024.png` y ejecuta `python3 tools/make_icons.py`.
 - Los textos y capturas son de la 1.0.1: comprobar que está aprobada en App Store.
