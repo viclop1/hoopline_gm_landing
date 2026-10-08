@@ -36,6 +36,11 @@ for src, name in FONTS.items():
 # --- capturas: recorte al móvil con esquinas redondeadas y transparencia
 FILES = {l: {"market": "01_market", "team": "03_team", "box": "04_box", "table": "05_table"} for l in ("en", "es", "de")}
 FILES["fr"] = {"market": "01_market", "team": "02_team", "box": "03_box", "table": "04_table"}
+# pantallas de los bloques por función: no todos los idiomas tienen ambas (falta es/cups y fr/board en la carpeta de la App Store)
+FILES["en"].update({"board": "02_board", "cups": "06_cups"})
+FILES["es"].update({"board": "02_board"})
+FILES["de"].update({"board": "02_board", "cups": "06_cups"})
+FILES["fr"].update({"cups": "05_cups"})
 BOX, R, W = (134, 553, 1158, 2716), 128, 560
 for lang, m in FILES.items():
     for k, f in m.items():

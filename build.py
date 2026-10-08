@@ -63,9 +63,13 @@ COPY = {
     fair_p="Gems buy time and appearance: a refill of the energy meter, a jersey, a court, the name over the arena. Coins pay the salary cap, and coins cannot be bought with money. That is the whole point.",
     prem_h="Premium",
     prem_p="An optional monthly subscription raises the energy limit, so one sitting goes further, keeps up to three named tactics boards to switch between in one tap, and gives you the assistant’s suggestion for every game. It changes nothing about how good your squad can be.",
+    feats=[
+        ('board', 'Your tactics board, before every game', 'Style, defence, pace and who to feed, with your odds moving as you choose.', 'The tactics board with attacking style, defence, pace and focus player options'),
+        ("team", "Your five, your call", "Set the court, rest tired starters or let Auto do it.", "The team screen with the starting five on the court and the bench below"),
+        ('cups', 'Then take them into a cup', 'A ladder of cups against fictional clubs, from Bronze to Gold.', 'The cups screen with Bronze, Silver and Gold cups'),
+    ],
     shots_h="Inside the app",
     shots=[
-        ("team", "Your five, your call", "Set the court, rest tired starters or let Auto do it.", "The team screen with the starting five on the court and the bench below"),
         ("box", "A box score for every game", "Points, rebounds and assists for everyone who played.", "The box score of a game with both teams’ players"),
         ("table", "Twelve teams. One title.", "22 league games, then the playoffs.", "The league standings with twelve teams"),
     ],
@@ -111,9 +115,13 @@ COPY = {
     fair_p="Las gemas compran tiempo y aspecto: recargar la energía, una equipación, una pista, el nombre del pabellón. Las monedas pagan el tope salarial y no se compran con dinero. De eso se trata.",
     prem_h="Premium",
     prem_p="Una suscripción mensual opcional amplía el límite de energía para que cada sesión dé más de sí, guarda hasta tres pizarras tácticas con nombre para cambiar de una a otra de un toque y te da la sugerencia del ayudante en cada partido. No cambia en nada lo bueno que puede llegar a ser tu equipo.",
+    feats=[
+        ('board', 'Tu pizarra táctica, antes de cada partido', 'Estilo, defensa, ritmo y a quién buscar, con tus probabilidades moviéndose según eliges.', 'La pizarra táctica con estilo de ataque, defensa, ritmo y jugador clave'),
+        ("team", "Tu quinteto, tu decisión", "Monta la pista, da descanso a los cansados o deja que lo haga Auto.", "La pantalla de equipo con el quinteto en la pista y el banquillo debajo"),
+        ('cups', 'Después, a por una copa', 'Una escalera de copas contra clubes ficticios, de Bronce a Oro.', 'La pantalla de copas con copas de Bronce, Plata y Oro'),
+    ],
     shots_h="Dentro de la app",
     shots=[
-        ("team", "Tu quinteto, tu decisión", "Monta la pista, da descanso a los cansados o deja que lo haga Auto.", "La pantalla de equipo con el quinteto en la pista y el banquillo debajo"),
         ("box", "La estadística de cada partido", "Puntos, rebotes y asistencias de todos los que jugaron.", "La estadística de un partido con los jugadores de los dos equipos"),
         ("table", "Doce equipos. Un título.", "22 partidos de liga y, después, los playoffs.", "La clasificación de la liga con doce equipos"),
     ],
@@ -159,9 +167,13 @@ COPY = {
     fair_p="Gems kaufen Zeit und Aussehen: eine Energie-Aufladung, ein Trikot, ein Spielfeld, den Namen der Halle. Münzen bezahlen das Gehaltslimit und lassen sich nicht mit Geld kaufen. Genau darum geht es.",
     prem_h="Premium",
     prem_p="Ein optionales Monatsabo erhöht das Energielimit, damit eine Sitzung länger reicht, speichert bis zu drei Taktiktafeln mit Namen, zwischen denen du mit einem Tipp wechselst, und gibt dir den Vorschlag des Assistenten für jedes Spiel. An der Stärke deines Kaders ändert es nichts.",
+    feats=[
+        ('board', 'Deine Taktiktafel, vor jedem Spiel', 'Stil, Verteidigung, Tempo und wen du suchst, und deine Chancen bewegen sich mit jeder Wahl.', 'Die Taktiktafel mit Angriffsstil, Verteidigung, Tempo und Schlüsselspieler'),
+        ("team", "Deine Fünf, deine Wahl", "Stell das Feld auf, gib den Müden Pause oder überlass es Auto.", "Der Team-Bildschirm mit der Startfünf auf dem Feld und der Bank darunter"),
+        ('cups', 'Dann ab in den Pokal', 'Eine Leiter aus Pokalen gegen fiktive Klubs, von Bronze bis Gold.', 'Der Pokalbildschirm mit Bronze-, Silber- und Gold-Pokalen'),
+    ],
     shots_h="In der App",
     shots=[
-        ("team", "Deine Fünf, deine Wahl", "Stell das Feld auf, gib den Müden Pause oder überlass es Auto.", "Der Team-Bildschirm mit der Startfünf auf dem Feld und der Bank darunter"),
         ("box", "Ein Boxscore für jedes Spiel", "Punkte, Rebounds und Assists für alle, die gespielt haben.", "Der Boxscore eines Spiels mit den Spielern beider Teams"),
         ("table", "Zwölf Teams. Ein Titel.", "22 Ligaspiele, danach die Playoffs.", "Die Ligatabelle mit zwölf Teams"),
     ],
@@ -207,9 +219,13 @@ COPY = {
     fair_p="Les gemmes achètent du temps et du style : une recharge d’énergie, un maillot, un parquet, le nom de la salle. Les pièces paient le plafond salarial et ne s’achètent pas avec de l’argent. C’est tout le principe.",
     prem_h="Premium",
     prem_p="Un abonnement mensuel facultatif augmente la limite d’énergie pour que chaque session dure plus longtemps, garde jusqu’à trois tableaux tactiques nommés pour passer de l’un à l’autre d’un geste et vous donne la suggestion de l’adjoint à chaque match. Il ne change rien au niveau que votre effectif peut atteindre.",
+    feats=[
+        ('board', 'Votre tableau tactique, avant chaque match', 'Style, défense, rythme et qui servir, avec vos chances qui bougent selon vos choix.', 'Le tableau tactique avec style d’attaque, défense, rythme et joueur clé'),
+        ("team", "Votre cinq, votre choix", "Composez le terrain, reposez les titulaires fatigués ou laissez Auto s’en charger.", "L’écran équipe avec le cinq de départ sur le terrain et le banc en dessous"),
+        ('cups', 'Puis direction la coupe', 'Une échelle de coupes contre des clubs fictifs, de Bronze à Or.', 'L’écran des coupes avec les coupes Bronze, Argent et Or'),
+    ],
     shots_h="Dans l’app",
     shots=[
-        ("team", "Votre cinq, votre choix", "Composez le terrain, reposez les titulaires fatigués ou laissez Auto s’en charger.", "L’écran équipe avec le cinq de départ sur le terrain et le banc en dessous"),
         ("box", "La feuille de chaque match", "Points, rebonds et passes de tous ceux qui ont joué.", "La feuille de match avec les joueurs des deux équipes"),
         ("table", "Douze équipes. Un titre.", "22 matchs de championnat, puis les playoffs.", "Le classement de la ligue avec douze équipes"),
     ],
@@ -300,6 +316,16 @@ def landing(lang):
 <img src="/assets/img/{lang}-{key}.webp" width="560" height="{{h}}" alt="{e(alt)}" loading="lazy" decoding="async">
 <figcaption><strong>{e(title)}</strong><span>{e(text)}</span></figcaption>
 </figure>'''.replace("{h}", "1183")
+    feats = ""
+    n = 0
+    for key, title, text, alt in c["feats"]:
+        if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "assets", "img", f"{lang}-{key}.webp")):
+            continue  # captura de ese idioma aún no disponible: el bloque se omite
+        n += 1
+        feats += f'''<article class="feat{" feat-r" if n % 2 == 0 else ""}">
+<div class="feat-text"><h2>{e(title)}</h2><p>{e(text)}</p></div>
+<div class="feat-phone"><img src="/assets/img/{lang}-{key}.webp" width="560" height="1183" alt="{e(alt)}" loading="lazy" decoding="async"></div>
+</article>'''
     faq = "".join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in c["faq"])
     faq += f'<details><summary>{e(c["help_q"])}</summary><p><a href="{LEGAL["support"]}">{e(c["help_a"])}</a></p></details>'
     lp, lt, ls = c["legal_links"]
@@ -334,6 +360,8 @@ def landing(lang):
 <h2>{e(c["do_h"])}</h2>
 <ul class="dolist">{do}</ul>
 </section>
+
+<section class="feats wrap">{feats}</section>
 
 <section class="fair">
 <div class="wrap fair-in">
