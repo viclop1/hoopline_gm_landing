@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoopline GM</title>
+<meta name="description" content="Hoopline GM">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0D1014">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/inter-display-800.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-400.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/style.css">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer"></head>
+<body class="auth">
+<header class="top wrap"><a class="brand" href="/">Hoopline GM</a></header>
+<main class="auth-main wrap">
+<div class="auth-card" id="card" aria-live="polite">
+<h1 id="t"></h1>
+<p id="p"></p>
+<form id="pw" hidden>
+<label for="pw1" id="pwl"></label>
+<input id="pw1" name="password" type="password" autocomplete="new-password" minlength="6" required>
+<label class="show"><input id="showpw" type="checkbox"> <span id="shl"></span></label>
+<p class="err" id="pwerr" role="alert" hidden></p>
+<button class="btn" type="submit" id="pwb"></button>
+</form>
+<p class="actions">
+<button class="btn" type="button" id="go" hidden></button>
+<a class="btn" id="open" href="com.hooplinegm.app://login-callback/" hidden></a>
+</p>
+<p class="note" id="n"></p>
+</div>
+</main>
+<script src="/assets/confirm.js" defer></script>
+</body>
+</html>

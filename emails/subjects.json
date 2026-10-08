@@ -1,0 +1,12 @@
+{
+ "supabase/confirm_signup": "Confirm your email · Confirma tu correo · Bestätige deine E-Mail · Confirmez votre e-mail",
+ "supabase/recovery": "Reset your password · Restablece tu contraseña · Passwort zurücksetzen · Réinitialisez votre mot de passe",
+ "supabase/email_change": "Confirm your new email · Confirma tu nuevo correo · Neue E-Mail bestätigen · Confirmez votre nouvel e-mail",
+ "supabase/magic_link": "Your sign-in link · Tu enlace de acceso · Dein Anmeldelink · Votre lien de connexion",
+ "supabase/reauthentication": "Your confirmation code · Tu código de confirmación · Dein Bestätigungscode · Votre code de confirmation",
+ "own/confirm_signup": "Confirm your email · Confirma tu correo · Bestätige deine E-Mail · Confirmez votre e-mail",
+ "own/recovery": "Reset your password · Restablece tu contraseña · Passwort zurücksetzen · Réinitialisez votre mot de passe",
+ "own/email_change": "Confirm your new email · Confirma tu nuevo correo · Neue E-Mail bestätigen · Confirmez votre nouvel e-mail",
+ "own/magic_link": "Your sign-in link · Tu enlace de acceso · Dein Anmeldelink · Votre lien de connexion",
+ "own/reauthentication": "Your confirmation code · Tu código de confirmación · Dein Bestätigungscode · Votre code de confirmation"
+}
