@@ -26,6 +26,8 @@ LEGAL = {
     "support": LEGAL_BASE + "/support.html",
 }
 
+from legalnotice import LN, OWNER
+
 LANGS = ["en", "es", "de", "fr"]
 PATH = {"en": "/", "es": "/es/", "de": "/de/", "fr": "/fr/"}
 NAME = {"en": "English", "es": "Español", "de": "Deutsch", "fr": "Français"}
@@ -172,7 +174,7 @@ COPY = {
     ],
     help_q="Brauchst du Hilfe?", help_a="Schreib uns per E-Mail",
     cta_h="Starte deinen ersten Draft",
-    legal_links=("Datenschutz", "Nutzungsbedingungen", "Support"),
+    legal_links=("Datenschutzerklärung", "Nutzungsbedingungen", "Support"),
     notice="Hoopline GM ist ein unabhängiges Basketball-Managerspiel. Es ist mit keiner professionellen Basketballliga, keinem Team, keiner Spielervereinigung und keinem Spieler verbunden und wird von ihnen weder unterstützt, gesponsert noch lizenziert. Echte Spieler werden mit ihrem Namen und öffentlich verfügbaren Statistiken als Teil der sportlichen Spielinhalte und der Simulationsmechanik genannt. Diese Nennungen bedeuten keine Unterstützung, kein Sponsoring, keine Genehmigung und keine Verbindung. Die Statistiken sind keine offiziellen Ligadaten. Alle Teams, Hallen und Wettbewerbe im Spiel sind erfunden.",
     lang_label="Sprache",
     home_label="Hoopline GM, Startseite",
@@ -229,7 +231,12 @@ COPY = {
 
 # ----------------------------------------------------------------- helpers
 e = html.escape
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist")
+OUT = os.environ.get("HOOPLINE_OUT") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist")
+
+# Aviso legal / Impressum: aprobado por el abogado el 08/10/2026 (contenido en legalnotice.py).
+# HOOPLINE_LEGAL_LIVE=0 python3 build.py genera la web sin ellos.
+LEGAL_PAGES_LIVE = os.environ.get("HOOPLINE_LEGAL_LIVE", "1") == "1"
+LNPATH = {"en": "/legal/", "es": "/es/legal/", "de": "/de/legal/", "fr": "/fr/legal/"}
 
 def w(rel, content):
     p = os.path.join(OUT, rel)
@@ -296,6 +303,7 @@ def landing(lang):
     faq = "".join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in c["faq"])
     faq += f'<details><summary>{e(c["help_q"])}</summary><p><a href="{LEGAL["support"]}">{e(c["help_a"])}</a></p></details>'
     lp, lt, ls = c["legal_links"]
+    ln_link = ('<a href="' + LNPATH[lang] + '">' + e(LN[lang]["link"]) + '</a>') if LEGAL_PAGES_LIVE else ""
     return f'''<!doctype html>
 <html lang="{lang}">
 <head>
@@ -354,7 +362,7 @@ def landing(lang):
 </section>
 </main>
 <footer class="foot wrap">
-<nav class="foot-links" aria-label="Legal"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a><a href="{LEGAL["support"]}">{e(ls)}</a></nav>
+<nav class="foot-links" aria-label="Legal"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a>{ln_link}<a href="{LEGAL["support"]}">{e(ls)}</a></nav>
 <p class="notice">{e(c["notice"])}</p>
 <p class="copy">© 2026 Hoopline GM</p>
 </footer>
@@ -577,6 +585,69 @@ confirm_js = r'''(function () {
 ''' % {"url": SUPABASE_URL, "key": SUPABASE_KEY, "open": OPEN_APP_URL}
 w("assets/confirm.js", confirm_js)
 
+# ----------------------------------------------------------------- Aviso legal / Impressum (solo si LEGAL_PAGES_LIVE)
+def legal_page(lang):
+    d = LN[lang]
+    c = COPY[lang]
+    canonical = SITE + LNPATH[lang]
+    alts = ""
+    for m in LANGS:
+        alts += '<link rel="alternate" hreflang="' + m + '" href="' + SITE + LNPATH[m] + '">\n'
+    alts += '<link rel="alternate" hreflang="x-default" href="' + SITE + LNPATH["en"] + '">\n'
+    extra = '<link rel="canonical" href="' + canonical + '">\n' + alts
+    switch = ""
+    for l in LANGS:
+        cur = ' aria-current="page"' if l == lang else ""
+        switch += '<a href="' + LNPATH[l] + '" hreflang="' + l + '" lang="' + l + '"' + cur + ' aria-label="' + NAME[l] + '">' + l.upper() + '</a>'
+    lp, lt, ls = c["legal_links"]
+    privacy = '<a href="' + LEGAL["privacy"] + '">' + e(lp) + '</a>'
+    terms = '<a href="' + LEGAL["terms"] + '">' + e(lt) + '</a>'
+    mail = '<a href="mailto:' + OWNER["email"] + '">' + OWNER["email"] + '</a>'
+    def fill(t):
+        t = e(t)
+        return t.replace("{notice}", e(c["notice"])).replace("{privacy}", privacy).replace("{terms}", terms).replace("{email}", mail)
+    card = ""
+    for k, v in d["card"]:
+        val = v
+        if v == OWNER["email"]:
+            val = mail
+        elif v == OWNER["site"]:
+            val = '<a href="' + OWNER["site"] + '">' + OWNER["site"].replace("https://", "") + '</a>'
+        else:
+            val = e(v)
+        card += '<div><dt>' + e(k) + '</dt><dd>' + val + '</dd></div>'
+    body = ""
+    for h, paras in d["sections"]:
+        body += '<section><h2>' + e(h) + '</h2>' + "".join("<p>" + fill(p) + "</p>" for p in paras) + '</section>'
+    skip = {"en": "Skip to content", "es": "Saltar al contenido", "de": "Zum Inhalt springen", "fr": "Aller au contenu"}[lang]
+    return f'''<!doctype html>
+<html lang="{lang}">
+<head>
+{head_common(lang, d["title"] + " · Hoopline GM", d["meta_desc"], canonical, extra)}</head>
+<body>
+<a class="skip" href="#main">{e(skip)}</a>
+<header class="top wrap">
+<a class="brand" href="{PATH[lang]}" aria-label="{e(c["home_label"])}">Hoopline GM</a>
+<nav class="langs" aria-label="{e(c["lang_label"])}">{switch}</nav>
+</header>
+<main id="main" class="legal-doc wrap">
+<h1>{e(d["title"])}</h1>
+<p class="legal-intro">{e(d["intro"])}</p>
+<dl class="legal-card">{card}</dl>
+{body}
+</main>
+<footer class="foot wrap">
+<nav class="foot-links" aria-label="Legal"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a><a href="{LNPATH[lang]}">{e(d["link"])}</a><a href="{LEGAL["support"]}">{e(ls)}</a></nav>
+<p class="copy">© 2026 Hoopline GM</p>
+</footer>
+</body>
+</html>
+'''
+
+if LEGAL_PAGES_LIVE:
+    for l in LANGS:
+        w(LNPATH[l].strip("/") + "/index.html", legal_page(l))
+
 # ----------------------------------------------------------------- 404, robots, sitemap, headers, favicon
 w("404.html", f'''<!doctype html>
 <html lang="en">
@@ -599,6 +670,12 @@ for l in LANGS:
     for m in LANGS:
         urls += f'<xhtml:link rel="alternate" hreflang="{m}" href="{SITE}{PATH[m]}"/>'
     urls += f'<xhtml:link rel="alternate" hreflang="x-default" href="{SITE}/"/></url>\n'
+if LEGAL_PAGES_LIVE:
+    for l in LANGS:
+        urls += "<url><loc>" + SITE + LNPATH[l] + "</loc>"
+        for m in LANGS:
+            urls += '<xhtml:link rel="alternate" hreflang="' + m + '" href="' + SITE + LNPATH[m] + '"/>'
+        urls += '<xhtml:link rel="alternate" hreflang="x-default" href="' + SITE + LNPATH["en"] + '"/></url>\n'
 w("sitemap.xml", f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n{urls}</urlset>\n')
 w("_headers", f"""/*
   X-Content-Type-Options: nosniff

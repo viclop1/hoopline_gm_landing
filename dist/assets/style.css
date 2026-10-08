@@ -136,3 +136,16 @@ h3 { font: 600 1.125rem/1.35 var(--body); }
   .shot-row { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; margin-inline: calc(-1 * var(--pad)); padding-inline: var(--pad); scroll-padding-inline: var(--pad); }
   .shot { flex: 0 0 min(72vw, 300px); scroll-snap-align: start; }
 }
+
+/* aviso legal / Impressum */
+.legal-doc { max-width: 760px; margin-inline: auto; padding-block: clamp(24px, 6vw, 72px) clamp(40px, 8vw, 96px); }
+.legal-doc h1 { font-size: clamp(2.25rem, 6vw, 3.5rem); line-height: 1.02; }
+.legal-intro { margin-top: 20px; color: var(--soft); }
+.legal-card { margin: 32px 0 0; padding: clamp(20px, 4vw, 32px); border: 1px solid var(--line); border-radius: 20px; background: var(--surface); display: grid; gap: 16px; }
+.legal-card div { display: grid; gap: 2px; }
+.legal-card dt { color: var(--muted); font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.legal-card dd { margin: 0; color: var(--text); overflow-wrap: anywhere; }
+.legal-card a, .legal-doc section a { color: var(--accent); text-underline-offset: 3px; }
+.legal-doc section { margin-top: clamp(28px, 5vw, 44px); }
+.legal-doc h2 { font-size: clamp(1.25rem, 2.4vw, 1.5rem); letter-spacing: -0.02em; }
+.legal-doc section p { margin-top: 10px; color: var(--soft); }
