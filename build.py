@@ -272,9 +272,11 @@ def head_common(lang, title, desc, canonical, extra=""):
 
 # ----------------------------------------------------------------- landing
 def badge(lang, c):
+    """Insignia de la App Store. Usa, por orden, la oficial localizada en SVG, en PNG, o la inglesa por defecto."""
     here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "assets", "img")
-    name = f"app-store-badge-{lang}.png" if os.path.exists(os.path.join(here, f"app-store-badge-{lang}.png")) else "app-store-badge.png"
-    return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="175" height="52" alt="{e(c["store"])}"></a>'
+    name = next((n for n in (f"app-store-badge-{lang}.svg", f"app-store-badge-{lang}.png", "app-store-badge.png")
+                 if os.path.exists(os.path.join(here, n))), "app-store-badge.png")
+    return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="175" height="52" alt="{e(c["store"])}" draggable="false"></a>'
 
 
 def landing(lang):
