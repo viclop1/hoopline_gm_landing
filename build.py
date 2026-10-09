@@ -52,9 +52,6 @@ COPY = {
     do=[
         "Draft fifteen players over a snake order you can see coming",
         "Bid in a live auction market where rivals bid back",
-        "Set a starting five on the court and cover for injuries",
-        "Before each game, set a tactics board against the rival’s: style, defence, pace, who to feed and who to mark",
-        "Play the season and the cups, with a box score for every game",
         "Finish in the top ten and play for the title: a play-in, then best-of-seven series to the Finals",
         "Search any player, star the ones you follow and get a notification when one goes up for auction",
         "Finish with a season report: your place, your best player, your badges",
@@ -104,9 +101,6 @@ COPY = {
     do=[
         "Draftea quince jugadores con un orden en serpiente que ves venir",
         "Puja en un mercado de subastas en directo donde los rivales responden",
-        "Coloca tu quinteto en la pista y cubre las lesiones",
-        "Antes de cada partido, monta tu pizarra táctica contra la del rival: estilo, defensa, ritmo, a quién buscar y a quién marcar",
-        "Juega la temporada y las copas, con la estadística de cada partido",
         "Acaba entre los diez primeros y juega por el título: play-in y series al mejor de siete hasta la final",
         "Busca cualquier jugador, marca con estrella a los que sigues y recibe un aviso cuando uno salga a subasta",
         "Cierra con el informe de temporada: tu puesto, tu mejor jugador, tus logros",
@@ -156,9 +150,6 @@ COPY = {
     do=[
         "Drafte fünfzehn Spieler in einer Snake-Reihenfolge, die du kommen siehst",
         "Biete auf einem Live-Auktionsmarkt, auf dem die Rivalen mitbieten",
-        "Stell deine Startfünf aufs Feld und fang Verletzungen ab",
-        "Stell vor jedem Spiel deine Taktiktafel gegen die des Gegners: Stil, Verteidigung, Tempo, wen du suchst und wen du deckst",
-        "Spiel die Saison und die Pokale, mit Boxscore für jedes Spiel",
         "Schaff es unter die ersten zehn und spiel um den Titel: Play-in, dann Best-of-Seven-Serien bis zu den Finals",
         "Such jeden Spieler, markier die, denen du folgst, und werde benachrichtigt, wenn einer versteigert wird",
         "Zum Schluss der Saisonbericht: dein Platz, dein bester Spieler, deine Erfolge",
@@ -208,9 +199,6 @@ COPY = {
     do=[
         "Draftez quinze joueurs dans un ordre en serpentin que vous voyez venir",
         "Enchérissez sur un marché en direct où les rivaux surenchérissent",
-        "Placez votre cinq de départ sur le terrain et gérez les blessures",
-        "Avant chaque match, préparez votre tableau tactique contre celui de l’adversaire : style, défense, rythme, qui servir et qui marquer",
-        "Jouez la saison et les coupes, avec la feuille de chaque match",
         "Finissez dans les dix premiers et jouez le titre : un play-in, puis des séries au meilleur des sept jusqu’à la finale",
         "Cherchez n’importe quel joueur, suivez-le d’une étoile et soyez prévenu quand il est mis aux enchères",
         "Terminez par le bilan de saison : votre place, votre meilleur joueur, vos succès",
@@ -283,6 +271,12 @@ def head_common(lang, title, desc, canonical, extra=""):
 {extra}'''
 
 # ----------------------------------------------------------------- landing
+def badge(lang, c):
+    here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "assets", "img")
+    name = f"app-store-badge-{lang}.png" if os.path.exists(os.path.join(here, f"app-store-badge-{lang}.png")) else "app-store-badge.png"
+    return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="175" height="52" alt="{e(c["store"])}"></a>'
+
+
 def landing(lang):
     c = COPY[lang]
     canonical = SITE + PATH[lang]
@@ -345,7 +339,7 @@ def landing(lang):
 <div class="hero-text">
 <h1>{e(c["h1"])}</h1>
 <p class="lead">{e(c["lead"])}</p>
-<p class="cta-row"><a class="btn" href="{APP_STORE}">{e(c["store"])}</a></p>
+<p class="cta-row">{badge(lang, c)}</p>
 <p class="note">{e(c["android"])}</p>
 </div>
 <div class="hero-phone"><img src="/assets/img/{lang}-market.webp" width="560" height="1183" alt="{e(c["market_alt"])}" fetchpriority="high" decoding="async"></div>
@@ -362,6 +356,8 @@ def landing(lang):
 </section>
 
 <section class="feats wrap">{feats}</section>
+
+<div class="mid-cta wrap">{badge(lang, c)}</div>
 
 <section class="fair">
 <div class="wrap fair-in">
@@ -386,7 +382,7 @@ def landing(lang):
 
 <section class="end wrap">
 <h2>{e(c["cta_h"])}</h2>
-<p class="cta-row"><a class="btn" href="{APP_STORE}">{e(c["store"])}</a></p>
+<p class="cta-row">{badge(lang, c)}</p>
 </section>
 </main>
 <footer class="foot wrap">

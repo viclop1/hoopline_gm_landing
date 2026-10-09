@@ -57,6 +57,10 @@ h3 { font: 600 1.125rem/1.35 var(--body); }
 .hero-text { align-self: center; padding-bottom: clamp(24px, 5vw, 72px); }
 .lead { margin-top: 24px; max-width: 32ch; color: var(--soft); font-size: clamp(1.1875rem, 2vw, 1.375rem); line-height: 1.45; }
 .cta-row { margin-top: 36px; }
+.badge { display: inline-block; line-height: 0; border-radius: 10px; }
+.badge img { height: 52px; width: auto; display: block; transition: opacity 0.15s; }
+.badge:hover img { opacity: 0.88; }
+.mid-cta { display: flex; justify-content: center; padding-block: clamp(8px, 2vw, 24px) clamp(56px, 9vw, 112px); }
 .hero .note { margin-top: 14px; }
 .hero-phone { align-self: end; justify-self: center; width: min(100%, 380px); max-height: 640px; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent); mask-image: linear-gradient(to bottom, #000 72%, transparent); }
 @media (prefers-reduced-motion: no-preference) {
