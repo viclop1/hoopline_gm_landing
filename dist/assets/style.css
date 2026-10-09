@@ -132,6 +132,13 @@ h3 { font: 600 1.125rem/1.35 var(--body); }
 .auth-card .show { display: flex; align-items: center; gap: 8px; font-weight: 400; color: var(--soft); }
 .auth-card .err { color: var(--danger); margin: 0; }
 
+/* fila "Dentro de la app": centrada en escritorio */
+@media (min-width: 861px) {
+  .shots h2 { text-align: center; }
+  .shot-row { justify-content: center; margin-inline: auto; column-gap: clamp(40px, 7vw, 112px); }
+  .shot figcaption { text-align: center; margin-inline: auto; }
+}
+
 /* móvil */
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; }
