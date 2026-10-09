@@ -8,7 +8,9 @@ Uso:
   python3 tools/make_assets.py --shots "<carpeta 'para App Store'>" [--fonts <carpeta con Inter *.otf>]
 
 La carpeta de capturas debe tener en/ es/ de/ fr/ con los nombres de la 1.0.1 (01_market, 03_team, 04_box, 05_table;
-en francés 01_market, 02_team, 03_box, 04_table). Las fuentes son Inter (licencia OFL): Inter-Regular, Inter-SemiBold, InterDisplay-ExtraBold.
+en francés 01_market, 02_team, 03_box, 04_table).
+Pantallas sin captura de la App Store en su idioma (es/cups, fr/board): se enmarcan desde la captura cruda con tools/frame_raw.py
+(fuentes en tools/raw-captures/). Las fuentes son Inter (licencia OFL): Inter-Regular, Inter-SemiBold, InterDisplay-ExtraBold.
 """
 import argparse, os
 from fontTools import subset
