@@ -60,7 +60,6 @@ h3 { font: 600 1.125rem/1.35 var(--body); }
 .badge { display: inline-block; line-height: 0; border-radius: 10px; }
 .badge img { height: 52px; width: auto; display: block; transition: opacity 0.15s; pointer-events: none; -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
 .badge:hover img { opacity: 0.88; }
-.mid-cta { display: flex; justify-content: center; padding-block: clamp(8px, 2vw, 24px) clamp(56px, 9vw, 112px); }
 .hero .note { margin-top: 14px; }
 .hero-phone { align-self: end; justify-self: center; width: min(100%, 380px); max-height: 640px; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent); mask-image: linear-gradient(to bottom, #000 72%, transparent); }
 @media (prefers-reduced-motion: no-preference) {

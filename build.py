@@ -359,7 +359,6 @@ def landing(lang):
 
 <section class="feats wrap">{feats}</section>
 
-<div class="mid-cta wrap">{badge(lang, c)}</div>
 
 <section class="fair">
 <div class="wrap fair-in">
