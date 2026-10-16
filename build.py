@@ -412,7 +412,7 @@ confirm_html = f'''<!doctype html>
 <p id="p"></p>
 <form id="pw" hidden>
 <label for="pw1" id="pwl"></label>
-<input id="pw1" name="password" type="password" autocomplete="new-password" minlength="6" required>
+<input id="pw1" name="password" type="password" autocomplete="new-password" minlength="8" required>
 <label class="show"><input id="showpw" type="checkbox"> <span id="shl"></span></label>
 <p class="err" id="pwerr" role="alert" hidden></p>
 <button class="btn" type="submit" id="pwb"></button>
@@ -449,10 +449,11 @@ confirm_js = r'''(function () {
       done_email_change: ["Email updated", "Your new email is active. Open Hoopline GM and sign in with it."],
       done_magiclink: ["You are verified", "Go back to Hoopline GM to keep playing."],
       done_recovery: ["Password updated", "Open Hoopline GM and sign in with your new password."],
-      form_title: "Choose a new password", form_text: "Use at least 6 characters.", pw_label: "New password", show: "Show password", save: "Save password",
+      form_title: "Choose a new password", form_text: "Use at least 8 characters, with letters and numbers.", pw_label: "New password", show: "Show password", save: "Save password",
       open: "Open Hoopline GM", desktop: "Open Hoopline GM on your phone to continue.",
       err_title: "This link did not work", err_expired: "It has expired or was already used. Request a new one from the app.",
       err_generic: "Something went wrong. Try again, or request a new link from the app.",
+      err_weak: "That password is not strong enough. Use at least 8 characters, with letters and numbers, and avoid common words.", err_same: "Choose a password different from your current one.",
       err_network: "No connection. Check your internet and try again.",
       missing_title: "This link is incomplete", missing_text: "Open the link from the email again, or request a new one from the app.",
       retry: "Try again",
@@ -469,10 +470,11 @@ confirm_js = r'''(function () {
       done_email_change: ["Correo actualizado", "Tu nuevo correo ya está activo. Abre Hoopline GM e inicia sesión con él."],
       done_magiclink: ["Verificado", "Vuelve a Hoopline GM para seguir jugando."],
       done_recovery: ["Contraseña actualizada", "Abre Hoopline GM e inicia sesión con tu nueva contraseña."],
-      form_title: "Elige una contraseña nueva", form_text: "Usa al menos 6 caracteres.", pw_label: "Contraseña nueva", show: "Mostrar contraseña", save: "Guardar contraseña",
+      form_title: "Elige una contraseña nueva", form_text: "Usa al menos 8 caracteres, con letras y números.", pw_label: "Contraseña nueva", show: "Mostrar contraseña", save: "Guardar contraseña",
       open: "Abrir Hoopline GM", desktop: "Abre Hoopline GM en tu móvil para continuar.",
       err_title: "Este enlace no ha funcionado", err_expired: "Ha caducado o ya se usó. Pide uno nuevo desde la app.",
       err_generic: "Algo ha fallado. Inténtalo de nuevo o pide un enlace nuevo desde la app.",
+      err_weak: "Esa contraseña no es lo bastante segura. Usa al menos 8 caracteres, con letras y números, y evita palabras comunes.", err_same: "Elige una contraseña distinta de la actual.",
       err_network: "Sin conexión. Revisa tu internet e inténtalo de nuevo.",
       missing_title: "El enlace está incompleto", missing_text: "Vuelve a abrir el enlace del correo o pide uno nuevo desde la app.",
       retry: "Intentar de nuevo",
@@ -489,10 +491,11 @@ confirm_js = r'''(function () {
       done_email_change: ["E-Mail aktualisiert", "Deine neue E-Mail ist aktiv. Öffne Hoopline GM und melde dich damit an."],
       done_magiclink: ["Verifiziert", "Geh zurück zu Hoopline GM, um weiterzuspielen."],
       done_recovery: ["Passwort aktualisiert", "Öffne Hoopline GM und melde dich mit deinem neuen Passwort an."],
-      form_title: "Neues Passwort wählen", form_text: "Mindestens 6 Zeichen.", pw_label: "Neues Passwort", show: "Passwort anzeigen", save: "Passwort speichern",
+      form_title: "Neues Passwort wählen", form_text: "Mindestens 8 Zeichen, mit Buchstaben und Zahlen.", pw_label: "Neues Passwort", show: "Passwort anzeigen", save: "Passwort speichern",
       open: "Hoopline GM öffnen", desktop: "Öffne Hoopline GM auf deinem Handy, um fortzufahren.",
       err_title: "Dieser Link hat nicht funktioniert", err_expired: "Er ist abgelaufen oder wurde schon benutzt. Fordere in der App einen neuen an.",
       err_generic: "Etwas ist schiefgegangen. Versuch es noch einmal oder fordere in der App einen neuen Link an.",
+      err_weak: "Dieses Passwort ist nicht sicher genug. Verwende mindestens 8 Zeichen mit Buchstaben und Zahlen und vermeide gängige Wörter.", err_same: "Wähle ein Passwort, das sich vom aktuellen unterscheidet.",
       err_network: "Keine Verbindung. Prüfe dein Internet und versuch es noch einmal.",
       missing_title: "Der Link ist unvollständig", missing_text: "Öffne den Link aus der E-Mail noch einmal oder fordere in der App einen neuen an.",
       retry: "Noch einmal versuchen",
@@ -509,10 +512,11 @@ confirm_js = r'''(function () {
       done_email_change: ["E-mail mis à jour", "Votre nouvel e-mail est actif. Ouvrez Hoopline GM et connectez-vous avec."],
       done_magiclink: ["Vérifié", "Retournez dans Hoopline GM pour continuer à jouer."],
       done_recovery: ["Mot de passe mis à jour", "Ouvrez Hoopline GM et connectez-vous avec votre nouveau mot de passe."],
-      form_title: "Choisissez un nouveau mot de passe", form_text: "Au moins 6 caractères.", pw_label: "Nouveau mot de passe", show: "Afficher le mot de passe", save: "Enregistrer le mot de passe",
+      form_title: "Choisissez un nouveau mot de passe", form_text: "Au moins 8 caractères, avec des lettres et des chiffres.", pw_label: "Nouveau mot de passe", show: "Afficher le mot de passe", save: "Enregistrer le mot de passe",
       open: "Ouvrir Hoopline GM", desktop: "Ouvrez Hoopline GM sur votre téléphone pour continuer.",
       err_title: "Ce lien n’a pas fonctionné", err_expired: "Il a expiré ou a déjà été utilisé. Demandez-en un nouveau depuis l’app.",
       err_generic: "Une erreur est survenue. Réessayez, ou demandez un nouveau lien depuis l’app.",
+      err_weak: "Ce mot de passe n’est pas assez sûr. Utilisez au moins 8 caractères, avec des lettres et des chiffres, et évitez les mots courants.", err_same: "Choisissez un mot de passe différent de l’actuel.",
       err_network: "Pas de connexion. Vérifiez votre internet et réessayez.",
       missing_title: "Le lien est incomplet", missing_text: "Rouvrez le lien de l’e-mail ou demandez-en un nouveau depuis l’app.",
       retry: "Réessayer",
@@ -593,6 +597,9 @@ confirm_js = r'''(function () {
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
     var err = $("pwerr"); err.hidden = true;
+    // The same rule as the app and as Supabase: 8 characters, a letter and a digit.
+    var pwv = $("pw1").value;
+    if (pwv.length < 8 || !/[A-Za-z]/.test(pwv) || !/[0-9]/.test(pwv)) { err.textContent = T.err_weak; err.hidden = false; return; }
     var b = $("pwb"); b.disabled = true;
     fetch(SUPABASE_URL + "/auth/v1/user", {
       method: "PUT",
@@ -603,7 +610,9 @@ confirm_js = r'''(function () {
     }).then(function (res) {
       b.disabled = false;
       if (res.ok) { access = null; var d = T.done_recovery; show(d[0], d[1], { open: true }); return; }
-      err.textContent = res.body.msg || res.body.message || T.err_generic; err.hidden = false;
+      // Read from the error's code, in the reader's language: Supabase's own sentence is English.
+      var code = res.body.error_code || res.body.code;
+      err.textContent = code === "weak_password" ? T.err_weak : code === "same_password" ? T.err_same : T.err_generic; err.hidden = false;
     }).catch(function () { b.disabled = false; err.textContent = T.err_network; err.hidden = false; });
   });
 })();
