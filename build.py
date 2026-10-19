@@ -235,6 +235,27 @@ COPY = {
 
 # ----------------------------------------------------------------- helpers
 e = html.escape
+HERE = os.path.dirname(os.path.abspath(__file__))
+ASSETS = os.path.join(HERE, "dist", "assets")
+
+def css_version():
+    """Huella corta de style.css: /assets/* se sirve con caché inmutable, así que el enlace cambia cuando cambia el CSS."""
+    import hashlib
+    with open(os.path.join(ASSETS, "style.css"), "rb") as f:
+        return hashlib.md5(f.read()).hexdigest()[:8]
+
+def webp_size(name):
+    """Ancho y alto reales de una captura de dist/assets/img (cabecera WebP), para que width/height nunca se desajusten."""
+    with open(os.path.join(ASSETS, "img", name), "rb") as f:
+        d = f.read(40)
+    kind = d[12:16]
+    if kind == b"VP8X":
+        return 1 + int.from_bytes(d[24:27], "little"), 1 + int.from_bytes(d[27:30], "little")
+    if kind == b"VP8L":
+        bits = int.from_bytes(d[21:25], "little")
+        return (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+    return int.from_bytes(d[26:28], "little") & 0x3FFF, int.from_bytes(d[28:30], "little") & 0x3FFF
+
 OUT = os.environ.get("HOOPLINE_OUT") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist")
 
 # Aviso legal / Impressum: aprobado por el abogado el 08/10/2026 (contenido en legalnotice.py).
@@ -265,9 +286,10 @@ def head_common(lang, title, desc, canonical, extra=""):
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/assets/fonts/inter-display-800.woff" as="font" type="font/woff" crossorigin>
-<link rel="preload" href="/assets/fonts/inter-400.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="preload" href="/assets/fonts/archivo-700.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/barlow-400.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="/assets/fonts/barlow-600.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v={css_version()}">
 {extra}'''
 
 # ----------------------------------------------------------------- landing
@@ -306,22 +328,30 @@ def landing(lang):
         switch += f'<a href="{PATH[l]}" hreflang="{l}" lang="{l}"{cur} aria-label="{NAME[l]}">{l.upper()}</a>'
     pillars = "".join(f'<li><h3>{e(t)}</h3><p>{e(p)}</p></li>' for t, p in c["pillars"])
     do = "".join(f"<li>{e(x)}</li>" for x in c["do"])
+    def shot(key, alt, cls="", **attrs):
+        """<img> de una captura de 800 px con su tamaño real. Por defecto carga diferida."""
+        name = f"{lang}-{key}-800.webp"
+        wd, ht = webp_size(name)
+        extra = " ".join(f'{k.replace("_", "-")}="{v}"' for k, v in attrs.items()) or 'loading="lazy"'
+        klass = f' class="{cls}"' if cls else ""
+        return f'<img{klass} src="/assets/img/{name}" width="{wd}" height="{ht}" alt="{e(alt)}" {extra} decoding="async">'
     shots = ""
     for key, title, text, alt in c["shots"]:
         shots += f'''<figure class="shot">
-<img src="/assets/img/{lang}-{key}.webp" width="560" height="{{h}}" alt="{e(alt)}" loading="lazy" decoding="async">
+{shot(key, alt)}
 <figcaption><strong>{e(title)}</strong><span>{e(text)}</span></figcaption>
-</figure>'''.replace("{h}", "1183")
-    feats = ""
-    n = 0
-    for key, title, text, alt in c["feats"]:
-        if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "assets", "img", f"{lang}-{key}.webp")):
-            continue  # captura de ese idioma aún no disponible: el bloque se omite
-        n += 1
-        feats += f'''<article class="feat{" feat-r" if n % 2 == 0 else ""}">
-<div class="feat-text"><h2>{e(title)}</h2><p>{e(text)}</p></div>
-<div class="feat-phone"><img src="/assets/img/{lang}-{key}.webp" width="560" height="1183" alt="{e(alt)}" loading="lazy" decoding="async"></div>
-</article>'''
+</figure>'''
+    # "Escenario": cada función es un tiempo. En escritorio una pila de móviles se queda fija y cambia de pantalla con el scroll (solo CSS);
+    # en móvil, con movimiento reducido o sin soporte, cada función lleva su móvil al lado (las capturas inline) y la pila no se muestra.
+    beat_items = [(k, t, x, a) for k, t, x, a in c["feats"] if os.path.exists(os.path.join(ASSETS, "img", f"{lang}-{k}-800.webp"))]
+    beats = "".join(f'''<article class="beat">
+<div class="beat-text"><h2>{e(t)}</h2><p>{e(x)}</p></div>
+{shot(k, a, "inline-phone")}
+</article>''' for k, t, x, a in beat_items)
+    rail = ""
+    if len(beat_items) == 3:  # la pila del CSS está hecha para tres pantallas
+        rail = '<div class="phone-rail" aria-hidden="true"><div class="phone-stack">' + "".join(
+            shot(k, "", f"screen s{i}") for i, (k, t, x, a) in enumerate(beat_items)) + "</div></div>"
     faq = "".join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in c["faq"])
     faq += f'<details><summary>{e(c["help_q"])}</summary><p><a href="{LEGAL["support"]}">{e(c["help_a"])}</a></p></details>'
     lp, lt, ls = c["legal_links"]
@@ -333,7 +363,7 @@ def landing(lang):
 <body>
 <a class="skip" href="#main">{e({"en":"Skip to content","es":"Saltar al contenido","de":"Zum Inhalt springen","fr":"Aller au contenu"}[lang])}</a>
 <header class="top wrap">
-<a class="brand" href="{PATH[lang]}" aria-label="{e(c["home_label"])}">Hoopline GM</a>
+<a class="brand" translate="no" href="{PATH[lang]}" aria-label="{e(c["home_label"])}">Hoopline GM</a>
 <nav class="langs" aria-label="{e(c["lang_label"])}">{switch}</nav>
 </header>
 <main id="main">
@@ -344,7 +374,7 @@ def landing(lang):
 <p class="cta-row">{badge(lang, c)}</p>
 <p class="note">{e(c["android"])}</p>
 </div>
-<div class="hero-phone"><img src="/assets/img/{lang}-market.webp" width="560" height="1183" alt="{e(c["market_alt"])}" fetchpriority="high" decoding="async"></div>
+<div class="hero-phone">{shot("market", c["market_alt"], fetchpriority="high")}</div>
 </section>
 
 <section class="open wrap">
@@ -357,23 +387,27 @@ def landing(lang):
 <ul class="dolist">{do}</ul>
 </section>
 
-<section class="feats wrap">{feats}</section>
-
+<section class="stage wrap">
+<div class="beats">{beats}</div>
+{rail}
+</section>
 
 <section class="fair">
 <div class="wrap fair-in">
 <h2>{e(c["fair_h"])}</h2>
 <div class="fair-body">
 <p>{e(c["fair_p"])}</p>
+<div class="prem">
 <h3>{e(c["prem_h"])}</h3>
 <p>{e(c["prem_p"])}</p>
+</div>
 </div>
 </div>
 </section>
 
 <section class="shots wrap" aria-labelledby="shots-h">
 <h2 id="shots-h">{e(c["shots_h"])}</h2>
-<div class="shot-row" tabindex="0" role="group" aria-labelledby="shots-h">{shots}</div>
+<div class="shot-row">{shots}</div>
 </section>
 
 <section class="faq wrap">
@@ -405,7 +439,7 @@ confirm_html = f'''<!doctype html>
 <head>
 {AUTH_HEAD}</head>
 <body class="auth">
-<header class="top wrap"><a class="brand" href="/">Hoopline GM</a></header>
+<header class="top wrap"><a class="brand" translate="no" href="/">Hoopline GM</a></header>
 <main class="auth-main wrap">
 <div class="auth-card" id="card" aria-live="polite">
 <h1 id="t"></h1>
@@ -661,7 +695,7 @@ def legal_page(lang):
 <body>
 <a class="skip" href="#main">{e(skip)}</a>
 <header class="top wrap">
-<a class="brand" href="{PATH[lang]}" aria-label="{e(c["home_label"])}">Hoopline GM</a>
+<a class="brand" translate="no" href="{PATH[lang]}" aria-label="{e(c["home_label"])}">Hoopline GM</a>
 <nav class="langs" aria-label="{e(c["lang_label"])}">{switch}</nav>
 </header>
 <main id="main" class="legal-doc wrap">
@@ -688,7 +722,7 @@ w("404.html", f'''<!doctype html>
 <head>
 {head_common("en", "Hoopline GM", "Hoopline GM", SITE + "/", '<meta name="robots" content="noindex">')}</head>
 <body class="auth">
-<header class="top wrap"><a class="brand" href="/">Hoopline GM</a></header>
+<header class="top wrap"><a class="brand" translate="no" href="/">Hoopline GM</a></header>
 <main class="auth-main wrap"><div class="auth-card">
 <h1>404</h1>
 <p>This page does not exist. · Esta página no existe. · Diese Seite gibt es nicht. · Cette page n’existe pas.</p>
