@@ -6,7 +6,7 @@ La referencia aporta el marco, la isla y la barra de estado limpia (9:41); la ca
 """
 import sys
 from PIL import Image, ImageDraw
-BOX, R, W = (134, 553, 1158, 2716), 128, 560
+BOX, R, W = (134, 553, 1158, 2716), 128, 800
 SX, SY, SW, SH = 28, 28, 968, 2107   # pantalla dentro del recorte del móvil
 STRIP = 162                          # filas superiores (barra de estado) que se toman de la referencia
 SR = 95                              # radio de las esquinas de la pantalla (medido en la referencia)
@@ -23,4 +23,4 @@ mask = Image.new("L", (T.width * 2, T.height * 2), 0)
 ImageDraw.Draw(mask).rounded_rectangle((2, 2, T.width * 2 - 3, T.height * 2 - 3), radius=R * 2, fill=255)
 T = T.convert("RGBA"); T.putalpha(mask.resize(T.size, Image.LANCZOS))
 T = T.resize((W, round(T.height * W / T.width)), Image.LANCZOS)
-T.save(out, quality=84, method=6); print(out, T.size)
+T.save(out, quality=78, method=6); print(out, T.size)

@@ -9,7 +9,7 @@ build.py              genera las páginas HTML en dist/ (Python estándar, sin i
 dist/                 lo que se publica (se sube tal cual a Cloudflare)
   assets/style.css      estilos (a mano)
   assets/confirm.js     lógica de /auth/confirm (a mano; la genera build.py con la URL y la clave de Supabase)
-  assets/fonts, img     fuentes Inter y capturas recortadas (las genera tools/make_assets.py)
+  assets/fonts, img     fuentes Archivo y Barlow (las de la app) y capturas de 800 px recortadas, con sufijo -800 por la caché inmutable (las genera tools/make_assets.py)
   _headers              cabeceras de seguridad de Cloudflare
 emails/               plantillas de correo de Supabase (enlace-supabase / enlace-propio) y su generador
 tools/make_assets.py  regenera fuentes, capturas y la imagen para redes (solo si cambian las capturas)
@@ -56,3 +56,9 @@ en el pie. Los textos salen de `aso-listing.md` (Project APP NBA) y están revis
 Aprobado por el abogado el 08/10/2026. El contenido está en `legalnotice.py` y `build.py` genera `/legal/`, `/es/legal/`, `/de/legal/` y `/fr/legal/`, con el enlace en el pie, el sitemap y el hreflang. Para generar la web sin ellos: `HOOPLINE_LEGAL_LIVE=0 python3 build.py`. Texto aprobado en Word: `legal-drafts/`.
 
 El apartado de la web de la política de privacidad (sección 8) está en el repo `hoopline-gm-legal` y en `legal/index.html` del repo de la app, y como referencia en `legalnotice.py` (`PRIVACY_WEB_SECTION`).
+
+## Diseño (versión «Escenario», 19/10/2026)
+- Tipografía y colores salen de la app (`../hoopline_gm/DESIGN.md`): Archivo para titulares, Barlow para texto, acento solo en acciones.
+- «Funciones» es un escenario: en escritorio (≥ 1000 px de ancho y ≥ 760 de alto, con `animation-timeline: view()` y movimiento permitido) un móvil fijo cambia de pantalla según la función que pasa; en el resto, cada función lleva su móvil al lado. Todo es CSS, sin JS.
+- `/assets/*` se sirve con caché inmutable: si cambias una captura, cámbiale el nombre; el CSS se versiona solo (`style.css?v=<huella>`, la calcula build.py).
+- Informe y maquetas del rediseño: `design-audit/` (sin versionar).
