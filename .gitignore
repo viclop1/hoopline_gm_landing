@@ -1,3 +1,5 @@
 .DS_Store
 __pycache__/
 *.pyc
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
