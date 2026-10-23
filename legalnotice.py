@@ -19,7 +19,7 @@ LN = {
         "title": "Legal notice",
         "link": "Legal notice",
         "meta_desc": "Legal notice of hooplinegm.com, the website of the game Hoopline GM.",
-        "intro": "Information about the owner of this website, as required by Article 10 of Spanish Law 34/2002 on information society services (LSSI) and, for visitors in Germany, § 5 of the German Digital Services Act (DDG).",
+        "intro": "Information about the owner of this website and how to contact them.",
         "card": [("Owner", OWNER["name"]), ("Email", OWNER["email"]), ("Website", OWNER["site"])],
         "sections": [
             ("About this website", ["hooplinegm.com presents the mobile game Hoopline GM and hosts the page that confirms the emails the game sends (account confirmation and password recovery). The game itself is governed by the {terms} and the {privacy}."]),
@@ -34,7 +34,7 @@ LN = {
         "title": "Aviso legal",
         "link": "Aviso legal",
         "meta_desc": "Aviso legal de hooplinegm.com, la web del juego Hoopline GM.",
-        "intro": "Información sobre el titular de esta web, conforme al artículo 10 de la Ley 34/2002 de servicios de la sociedad de la información y de comercio electrónico (LSSI) y, para las personas que la visitan desde Alemania, al § 5 de la ley alemana de servicios digitales (DDG).",
+        "intro": "Información sobre el titular de esta web y cómo contactar con él.",
         "card": [("Titular", OWNER["name"]), ("Correo electrónico", OWNER["email"]), ("Sitio web", OWNER["site"])],
         "sections": [
             ("Sobre esta web", ["hooplinegm.com presenta el juego para móviles Hoopline GM y aloja la página que confirma los correos que envía el juego (confirmación de cuenta y recuperación de contraseña). El juego se rige por las {terms} y la {privacy}."]),
@@ -49,7 +49,7 @@ LN = {
         "title": "Impressum",
         "link": "Impressum",
         "meta_desc": "Impressum von hooplinegm.com, der Website des Spiels Hoopline GM.",
-        "intro": "Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz) und Artikel 10 des spanischen Gesetzes 34/2002 (LSSI).",
+        "intro": "Angaben zum Betreiber dieser Website und zur Kontaktaufnahme.",
         "card": [("Anbieter", OWNER["name"]), ("E-Mail", OWNER["email"]), ("Website", OWNER["site"])],
         "sections": [
             ("Über diese Website", ["hooplinegm.com stellt das Mobilspiel Hoopline GM vor und enthält die Seite, auf der die vom Spiel versendeten E-Mails bestätigt werden (Kontobestätigung und Zurücksetzen des Passworts). Für das Spiel selbst gelten die {terms} und die {privacy}."]),
@@ -64,7 +64,7 @@ LN = {
         "title": "Mentions légales",
         "link": "Mentions légales",
         "meta_desc": "Mentions légales de hooplinegm.com, le site du jeu Hoopline GM.",
-        "intro": "Informations sur l’éditeur de ce site, conformément à l’article 10 de la loi espagnole 34/2002 (LSSI) et, pour les visiteurs en Allemagne, au § 5 de la loi allemande sur les services numériques (DDG).",
+        "intro": "Informations sur l’éditeur de ce site et sur la manière de le contacter.",
         "card": [("Éditeur", OWNER["name"]), ("E-mail", OWNER["email"]), ("Site", OWNER["site"])],
         "sections": [
             ("À propos de ce site", ["hooplinegm.com présente le jeu mobile Hoopline GM et héberge la page qui confirme les e-mails envoyés par le jeu (confirmation de compte et récupération du mot de passe). Le jeu est régi par les {terms} et la {privacy}."]),
