@@ -26,7 +26,7 @@ ap.add_argument("--shots", required=True)
 ap.add_argument("--fonts", default=os.path.join(HERE, "..", "..", "hoopline_gm", "fonts"))
 ap.add_argument("--out", default=os.path.join(HERE, "..", "dist", "assets"))
 ap.add_argument("--with-fonts", action="store_true", help="regenera las fuentes (por defecto no se tocan)")
-ap.add_argument("--og", action="store_true", help="regenera también og.png (por defecto no se toca)")
+ap.add_argument("--og", action="store_true", help="regenera también las imágenes para redes og-<idioma>-v2.png (por defecto no se tocan)")
 a = ap.parse_args()
 OUT = os.path.abspath(a.out)
 os.makedirs(os.path.join(OUT, "fonts"), exist_ok=True)
@@ -61,21 +61,38 @@ for lang in LANGS:
             im = im.crop((0, 0, im.width, round(im.height * keep)))
         im.save(os.path.join(OUT, "img", f"{lang}-{k}-{W}-{TAG}.webp"), quality=78, method=6)
 
-# --- imagen para redes (1200x630): solo con --og
+# --- imagen para redes (1200x630, una por idioma): solo con --og. Mismo escenario que la web: fondo ink, luz violeta, titular Archivo, móvil con degradado.
+OG_TAG = "v2"
+OG = {  # (titular en dos líneas, texto en dos líneas)
+    "en": (("Every bid", "in the open"), ("Draft, bid and build a basketball team.", "A manager game where nothing is hidden.")),
+    "es": (("Cada puja,", "a la vista"), ("Draftea, puja y arma tu equipo de baloncesto.", "Un mánager sin trampas ocultas.")),
+    "de": (("Jedes Gebot", "offen"), ("Drafte, biete, bau dein Basketballteam.", "Manager-Spiel ohne versteckte Regeln.")),
+    "fr": (("Chaque enchère,", "à découvert"), ("Draftez, enchérissez, bâtissez votre équipe", "de basket. Un manager transparent.")),
+}
 if a.og:
-    Wd, Ht = 1200, 630
-    base = Image.new("RGBA", (Wd, Ht), "#0D1014"); d = ImageDraw.Draw(base)
+    Wd, Ht, MAXW = 1200, 630, 640
     F = lambda n, s: ImageFont.truetype(os.path.join(a.fonts, n), s)
-    d.text((72, 64), "Hoopline GM", font=F("Archivo-Bold.ttf", 34), fill="#F2F5F8")
-    d.text((72, 190), "Every bid", font=F("Archivo-Bold.ttf", 100), fill="#F2F5F8")
-    d.text((72, 300), "in the open", font=F("Archivo-Bold.ttf", 100), fill="#F2F5F8")
-    d.text((72, 452), "Draft, bid and build a basketball team.", font=F("Barlow-Regular.ttf", 32), fill="#C9D1DB")
-    d.text((72, 494), "A manager game where nothing is hidden.", font=F("Barlow-Regular.ttf", 32), fill="#C9D1DB")
-    ph = Image.open(os.path.join(OUT, "img", f"en-market-{W}-{TAG}.webp")).convert("RGBA"); pw = 380
-    ph = ph.resize((pw, round(ph.height * pw / ph.width)), Image.LANCZOS)
-    layer = Image.new("RGBA", (Wd, Ht), (0, 0, 0, 0)); layer.alpha_composite(ph, (770, 90))
-    mask = np.full((Ht, Wd), 255, dtype=np.uint8)
-    for y in range(420, Ht): mask[y, :] = int(255 * max(0, 1 - (y - 420) / 210))
-    layer.putalpha(Image.fromarray(np.minimum(np.array(layer.split()[3]), mask)))
-    base.alpha_composite(layer); base.convert("RGB").save(os.path.join(OUT, "og.png"), optimize=True)
+    def fit(d, text, font, size, maxw):
+        while d.textlength(text, font=F(font, size)) > maxw and size > 20: size -= 2
+        return F(font, size)
+    for lang, (h, lead) in OG.items():
+        base = Image.new("RGBA", (Wd, Ht), "#0D1014"); d = ImageDraw.Draw(base)
+        glow = Image.new("L", (Wd, Ht), 0); gd = ImageDraw.Draw(glow); gd.ellipse((700, 20, 1260, 620), fill=70)
+        glow = glow.filter(__import__("PIL.ImageFilter", fromlist=["GaussianBlur"]).GaussianBlur(90))
+        base.paste(Image.new("RGBA", (Wd, Ht), "#8B7BFF"), (0, 0), glow)
+        d = ImageDraw.Draw(base)
+        d.text((72, 64), "Hoopline GM", font=F("Archivo-Bold.ttf", 34), fill="#F2F5F8")
+        hs = min(fit(d, t, "Archivo-Bold.ttf", 100, MAXW).size for t in h)
+        d.text((72, 190), h[0], font=F("Archivo-Bold.ttf", hs), fill="#F2F5F8")
+        d.text((72, 190 + round(hs * 1.1)), h[1], font=F("Archivo-Bold.ttf", hs), fill="#F2F5F8")
+        ls = min(fit(d, t, "Barlow-Regular.ttf", 32, MAXW).size for t in lead)
+        d.text((72, 452), lead[0], font=F("Barlow-Regular.ttf", ls), fill="#C9D1DB")
+        d.text((72, 452 + round(ls * 1.3)), lead[1], font=F("Barlow-Regular.ttf", ls), fill="#C9D1DB")
+        ph = Image.open(os.path.join(OUT, "img", f"{lang}-market-{W}-{TAG}.webp")).convert("RGBA"); pw = 380
+        ph = ph.resize((pw, round(ph.height * pw / ph.width)), Image.LANCZOS)
+        layer = Image.new("RGBA", (Wd, Ht), (0, 0, 0, 0)); layer.alpha_composite(ph, (770, 90))
+        mask = np.full((Ht, Wd), 255, dtype=np.uint8)
+        for y in range(420, Ht): mask[y, :] = int(255 * max(0, 1 - (y - 420) / 210))
+        layer.putalpha(Image.fromarray(np.minimum(np.array(layer.split()[3]), mask)))
+        base.alpha_composite(layer); base.convert("RGB").save(os.path.join(OUT, f"og-{lang}-{OG_TAG}.png"), optimize=True)
 print("assets en", OUT)

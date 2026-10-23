@@ -321,8 +321,8 @@ def head_common(lang, title, desc, canonical, extra=""):
 def badge(lang, c):
     """Insignia de la App Store. Usa, por orden, la oficial del idioma (SVG o PNG) y, si no está, la inglesa en SVG."""
     here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "assets", "img")
-    name = next((n for n in (f"app-store-badge-{lang}.svg", f"app-store-badge-{lang}.png", "app-store-badge-en.svg", "app-store-badge.png")
-                 if os.path.exists(os.path.join(here, n))), "app-store-badge.png")
+    name = next((n for n in (f"app-store-badge-{lang}.svg", f"app-store-badge-{lang}.png", "app-store-badge-en.svg")
+                 if os.path.exists(os.path.join(here, n))), "app-store-badge-en.svg")
     return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="156" height="52" alt="{e(c["store"])}" draggable="false"></a>'
 
 
@@ -344,7 +344,7 @@ def landing(lang):
 <meta property="og:description" content="{e(c["desc"])}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:locale" content="{OG_LOCALE[lang]}">
-<meta property="og:image" content="{SITE}/assets/og.png">
+<meta property="og:image" content="{SITE}/assets/og-{lang}-v2.png">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 '''

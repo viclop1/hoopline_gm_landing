@@ -226,3 +226,16 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
 .legal-doc section { margin-top: clamp(28px, 5vw, 44px); }
 .legal-doc h2 { font-size: clamp(1.25rem, 2.4vw, 1.5rem); letter-spacing: -0.01em; }
 .legal-doc section p { margin-top: 10px; color: var(--soft); }
+
+/* móvil y tableta estrecha (< 861 px): las funciones pasan a un carrusel horizontal con ajuste al deslizar, para no apilar cinco móviles.
+   La siguiente tarjeta asoma a la derecha para que se vea que se desliza. Sin JS. */
+@media (max-width: 860px) {
+  .beats { display: flex; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+           margin-inline: calc(var(--pad) * -1); padding-inline: var(--pad); scroll-padding-inline: var(--pad); padding-bottom: 4px; }
+  .beats::-webkit-scrollbar { display: none; }
+  .beat { flex: 0 0 min(82%, 340px); scroll-snap-align: start; grid-template-rows: auto 1fr; align-content: stretch; justify-items: stretch; gap: var(--s5, 20px);
+          padding: 22px 20px 0; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .beat p { font-size: 1.0625rem; margin-top: 10px; }
+  .beat h2 { font-size: clamp(1.375rem, 6vw, 1.75rem); }
+  .beat .inline-phone { width: 100%; align-self: end; margin-top: auto; animation: none !important; clip-path: none; }
+}
