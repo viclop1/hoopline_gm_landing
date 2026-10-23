@@ -76,12 +76,14 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
 .hero-text { align-self: center; padding-bottom: var(--s12); }
 .lead { margin-top: 24px; max-width: 30ch; color: var(--soft); font-size: clamp(1.25rem, 2vw, 1.5rem); line-height: 1.4; }
 .cta-row { margin-top: 36px; }
+.hero-video { position: absolute; inset: 0 auto auto 0; width: 100%; height: auto; aspect-ratio: 800 / 1162; border: 1px solid var(--line-strong); border-radius: 12.2% 12.2% 0 0 / 8.4% 8.4% 0 0; background: var(--ink); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .hero-video { display: none; } }
 .badge { display: inline-block; line-height: 0; border-radius: 10px; transition: transform 0.12s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .badge img { height: 52px; width: auto; display: block; transition: opacity 0.15s; pointer-events: none; -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
 .badge:hover img { opacity: 0.88; }
 .badge:active { transform: scale(0.97); }
 .hero .note { margin-top: 14px; }
-.hero-phone { align-self: end; justify-self: center; width: min(100%, 470px); max-height: 720px; overflow: hidden; -webkit-mask-image: linear-gradient(#000 78%, transparent); mask-image: linear-gradient(#000 78%, transparent); }
+.hero-phone { position: relative; align-self: end; justify-self: center; width: min(100%, 470px); max-height: 720px; overflow: hidden; -webkit-mask-image: linear-gradient(#000 78%, transparent); mask-image: linear-gradient(#000 78%, transparent); }
 
 .open h2 { max-width: 22ch; }
 .pillars { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: var(--s12); }
@@ -179,7 +181,7 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
   .hero-text > :nth-child(2) { --i: 1; }
   .hero-text > :nth-child(3) { --i: 2; }
   .hero-text > :nth-child(4) { --i: 3; }
-  .hero-phone img { animation: lift 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .hero-phone img, .hero-video { animation: lift 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
   .faq-list details[open] p { animation: enter 0.18s ease-out both; }
   @supports (animation-timeline: view()) {
     .pillars li, .shot, .beat:not(:nth-child(3)) .inline-phone { animation: enter linear both; animation-timeline: view(); animation-range: entry 5% entry 40%; }

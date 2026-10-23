@@ -66,3 +66,11 @@ El apartado de la web de la política de privacidad (sección 8) está en el rep
 ## Antes de subir
 
 `python3 build.py && python3 tools/check_dist.py` — el segundo comprueba enlaces y recursos, imágenes con tamaño y alt, CSP (nada en línea), versión de la hoja de estilos, precargas y que las cuatro portadas tengan las mismas imágenes. Sale con código 1 si algo falla.
+
+## Licencias de las fuentes
+
+Archivo (Omnibus-Type) y Barlow (Jeremy Tribby) se distribuyen con la licencia SIL Open Font License 1.1 (https://openfontlicense.org). Los ficheros de `dist/assets/fonts/` son un subconjunto latino en woff2 de los TTF de `../hoopline_gm/fonts`; la licencia de cada familia va con esos TTF. Se sirven desde nuestro propio dominio.
+
+## Clip del hero
+
+`dist/assets/video/<idioma>-hero-v1.mp4` (800×1162, H.264, sin audio, ≈ 300 KB). Si existe, `build.py` lo pone encima de la captura del hero (autoplay, mudo, bucle); con «reducir movimiento» se oculta y queda la captura. Hoy solo existe `es`. Para otro idioma: misma grabación con la app en ese idioma y `ffmpeg` con el recorte `crop=1080:1568:0:140,scale=800:1162` (quita barra de estado y cinta DEBUG).

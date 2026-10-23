@@ -323,7 +323,11 @@ def badge(lang, c):
     here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "assets", "img")
     name = next((n for n in (f"app-store-badge-{lang}.svg", f"app-store-badge-{lang}.png", "app-store-badge-en.svg")
                  if os.path.exists(os.path.join(here, n))), "app-store-badge-en.svg")
-    return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="156" height="52" alt="{e(c["store"])}" draggable="false"></a>'
+    wd = 156
+    if name.endswith(".svg"):  # el ancho sale del SVG de Apple (las insignias localizadas no miden igual): 52 px de alto
+        m = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', open(os.path.join(here, name), encoding="utf-8").read(2000))
+        if m: wd = round(52 * float(m.group(1)) / float(m.group(2)))
+    return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="{wd}" height="52" alt="{e(c["store"])}" draggable="false"></a>'
 
 
 @in_lang
@@ -361,6 +365,11 @@ def landing(lang):
         extra = " ".join(f'{k.replace("_", "-")}="{v}"' for k, v in attrs.items()) or 'loading="lazy"'
         klass = f' class="{cls}"' if cls else ""
         return f'<img{klass} src="/assets/img/{name}" width="{wd}" height="{ht}" alt="{e(alt)}" {extra} decoding="async">'
+    # clip del hero (opcional, uno por idioma: la interfaz sale en ese idioma). Va encima de la captura, que sigue siendo el LCP y lo que
+    # ven quien pide menos movimiento, quien no puede reproducir y quien aún no lo ha cargado. Decorativo: el alt ya está en la captura.
+    vname = f"{lang}-hero-v1.mp4"
+    hero_video = (f'<video class="hero-video" src="/assets/video/{vname}" width="800" height="1162" autoplay muted loop playsinline preload="auto" '
+                  f'aria-hidden="true" tabindex="-1" disablepictureinpicture disableremoteplayback></video>') if os.path.exists(os.path.join(ASSETS, "video", vname)) else ""
     shots = ""
     for key, title, text, alt in c["shots"]:
         shots += f'''<figure class="shot">
@@ -400,7 +409,7 @@ def landing(lang):
 <p class="cta-row">{badge(lang, c)}</p>
 <p class="note">{e(c["android"])}</p>
 </div>
-<div class="hero-phone">{shot("market", c["market_alt"], fetchpriority="high")}</div>
+<div class="hero-phone">{shot("market", c["market_alt"], fetchpriority="high")}{hero_video}</div>
 </section>
 
 <section class="open wrap">

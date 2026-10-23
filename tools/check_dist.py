@@ -79,7 +79,8 @@ for pg in sorted(pages):
     if re.search(r"\bNBA\b", text) and not rel.startswith("legal") and "/legal/" not in rel:
         err(f"{rel}: aparece «NBA» en el texto visible")
     if rel in ("index.html", "es/index.html", "de/index.html", "fr/index.html"):
-        structure[rel] = (len(p.imgs), [os.path.basename(i["src"]).split("-", 1)[1] for i in p.imgs])
+        shots = [i for i in p.imgs if "app-store-badge" not in i["src"]]  # las insignias llevan el idioma en el nombre y pueden faltar
+        structure[rel] = (len(shots), [os.path.basename(i["src"]).split("-", 1)[1] for i in shots])
 if len(structure) == 4:
     ref = next(iter(structure.values()))
     for k, v in structure.items():
@@ -90,7 +91,7 @@ used = set()
 for pg in pages:
     used |= set(re.findall(r'/assets/[^"\')\s]+', open(pg, encoding="utf-8").read()))
 used |= set(re.findall(r'/assets/[^"\')\s]+', css))
-for sub in ("img", "fonts"):
+for sub in ("img", "fonts", "video"):
     for f in os.listdir(os.path.join(ROOT, "assets", sub)):
         if f"/assets/{sub}/{f}" not in used and not f.startswith(("og", "app-icon")):
             warnings.append(f"sin usar: assets/{sub}/{f}")
