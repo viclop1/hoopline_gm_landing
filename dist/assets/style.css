@@ -146,12 +146,13 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
 }
 @media (min-width: 1000px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
   @supports ((animation-timeline: view()) and (timeline-scope: --x)) {
-    .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: clamp(32px, 6vw, 96px); timeline-scope: --b0, --b1, --b2, --b3; }
+    .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: clamp(32px, 6vw, 96px); timeline-scope: --b0, --b1, --b2, --b3, --b4; }
     .beat { grid-template-columns: none; min-height: min(82vh, 720px); align-content: center; justify-items: start; max-width: 30rem; gap: 0; }
     .beat:nth-child(1) { view-timeline: --b0 block; }
     .beat:nth-child(2) { view-timeline: --b1 block; }
     .beat:nth-child(3) { view-timeline: --b2 block; }
     .beat:nth-child(4) { view-timeline: --b3 block; }
+    .beat:nth-child(5) { view-timeline: --b4 block; }
     /* la captura inline sigue en el DOM para quien lee con lector de pantalla (su alt), pero no se ve: la pila la sustituye */
     .inline-phone { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); }
     .phone-rail { display: block; position: relative; }
@@ -161,7 +162,8 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
     .s0 { animation: o0 linear both; animation-timeline: --b0; animation-range: cover; }
     .s1 { animation: o1 linear both; animation-timeline: --b1; animation-range: cover; }
     .s2 { animation: o2 linear both; animation-timeline: --b2; animation-range: cover; }
-    .s3 { animation: o3 linear both; animation-timeline: --b3; animation-range: cover; }
+    .s3 { animation: o1 linear both; animation-timeline: --b3; animation-range: cover; }
+    .s4 { animation: o3 linear both; animation-timeline: --b4; animation-range: cover; }
     @keyframes o0 { 0%, 66% { opacity: 1; filter: none; } 78%, 100% { opacity: 0; filter: blur(4px); } }
     @keyframes o1 { 0%, 22% { opacity: 0; filter: blur(4px); } 34%, 66% { opacity: 1; filter: none; } 78%, 100% { opacity: 0; filter: blur(4px); } }
     @keyframes o2 { 0%, 22% { opacity: 1; clip-path: inset(0 0 100% 0 round 44px); filter: none; } 34%, 66% { opacity: 1; clip-path: inset(0 round 44px); filter: none; } 78%, 100% { opacity: 0; clip-path: inset(0 round 44px); filter: blur(4px); } }

@@ -43,7 +43,7 @@ for src, name in (FONTS.items() if a.with_fonts else ()):
 # --- capturas: recorte al móvil con esquinas redondeadas y transparencia
 # Capturas de tienda de la 1.0.6 (Tienda/iOS/<idioma>/NN.png, 1320x2868, las 10 en los 4 idiomas): 01 mercado, 02 inicio, 03 equipo,
 # 04 pizarra, 05 partido, 06 playoffs, 07 duelos, 08 copas, 09 clasificación, 10 informe de temporada.
-NUM = {"market": 1, "team": 3, "board": 4, "box": 5, "duels": 7, "cups": 8, "table": 9}
+NUM = {"market": 1, "team": 3, "board": 4, "box": 5, "playoffs": 6, "duels": 7, "cups": 8, "table": 9}
 LANGS = ("en", "es", "de", "fr")
 BOX, R, W = (130, 640, 1192, 2782), 130, 800        # el móvil dentro del compuesto (con su borde de 4 px)
 TAG = "v106"                                        # cambia con cada juego de capturas: la caché de /assets es inmutable
