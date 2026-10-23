@@ -6,7 +6,7 @@ Salida: dist/   (se sube tal cual a Cloudflare Pages)
 
 Para cambiar enlaces, URLs o textos, edita la sección CONFIG y COPY y vuelve a ejecutar.
 """
-import html, os, json
+import html, os, json, re
 
 # ----------------------------------------------------------------- CONFIG
 SITE = "https://hooplinegm.com"
@@ -65,6 +65,7 @@ COPY = {
         ('board', 'Your tactics board, before every game', 'Style, defence, pace and who to feed, with your odds moving as you choose.', 'The tactics board with attacking style, defence, pace and focus player options'),
         ("team", "Your five, your call", "Set the court, rest tired starters or let Auto do it.", "The team screen with the starting five on the court and the bench below"),
         ('cups', 'Then take them into a cup', 'A ladder of cups against fictional clubs, from Bronze to Gold.', 'The cups screen with Bronze, Silver and Gold cups'),
+        ('playoffs', "Then the playoffs: best of seven", "Finish in the top ten for a play-in, then best-of-seven series to the Finals.", "The playoff bracket with the series of each round"),
         ('duels', "Challenge other managers", "Pick a rival and the game is played at once. Others can challenge your team while you are away.", "The duels screen with today’s rivals and their starting fives"),
     ],
     shots_h="Inside the app",
@@ -116,6 +117,7 @@ COPY = {
         ('board', 'Tu pizarra táctica, antes de cada partido', 'Estilo, defensa, ritmo y a quién buscar, con tus probabilidades moviéndose según eliges.', 'La pizarra táctica con estilo de ataque, defensa, ritmo y jugador clave'),
         ("team", "Tu quinteto, tu decisión", "Monta la pista, da descanso a los cansados o deja que lo haga Auto.", "La pantalla de equipo con el quinteto en la pista y el banquillo debajo"),
         ('cups', 'Después, a por una copa', 'Una escalera de copas contra clubes ficticios, de Bronce a Oro.', 'La pantalla de copas con copas de Bronce, Plata y Oro'),
+        ('playoffs', "Después, los playoffs: al mejor de siete", "Acaba entre los diez primeros y juega el play-in; después, series al mejor de siete hasta la final.", "El cuadro de playoffs con las series de cada ronda"),
         ('duels', "Reta a otros mánagers", "Elige un rival y el partido se juega al instante. Otros pueden retar a tu equipo mientras no estás.", "La pantalla de duelos con los rivales de hoy y sus quintetos"),
     ],
     shots_h="Dentro de la app",
@@ -167,6 +169,7 @@ COPY = {
         ('board', 'Deine Taktiktafel, vor jedem Spiel', 'Stil, Verteidigung, Tempo und wen du suchst, und deine Chancen bewegen sich mit jeder Wahl.', 'Die Taktiktafel mit Angriffsstil, Verteidigung, Tempo und Schlüsselspieler'),
         ("team", "Deine Fünf, deine Wahl", "Stell das Feld auf, gib den Müden Pause oder überlass es Auto.", "Der Team-Bildschirm mit der Startfünf auf dem Feld und der Bank darunter"),
         ('cups', 'Dann ab in den Pokal', 'Eine Leiter aus Pokalen gegen fiktive Klubs, von Bronze bis Gold.', 'Der Pokalbildschirm mit Bronze-, Silber- und Gold-Pokalen'),
+        ('playoffs', "Dann die Playoffs: Best of Seven", "Schaff es unter die ersten zehn: Play-in, dann Best-of-Seven-Serien bis zu den Finals.", "Der Playoff-Baum mit den Serien jeder Runde"),
         ('duels', "Fordere andere Manager heraus", "Wähl einen Rivalen, das Spiel wird sofort gespielt. Andere können dein Team herausfordern, während du weg bist.", "Der Duell-Bildschirm mit den heutigen Rivalen und ihren Startfünf"),
     ],
     shots_h="In der App",
@@ -218,6 +221,7 @@ COPY = {
         ('board', 'Votre tableau tactique, avant chaque match', 'Style, défense, rythme et qui servir, avec vos chances qui bougent selon vos choix.', 'Le tableau tactique avec style d’attaque, défense, rythme et joueur clé'),
         ("team", "Votre cinq, votre choix", "Composez le terrain, reposez les titulaires fatigués ou laissez Auto s’en charger.", "L’écran équipe avec le cinq de départ sur le terrain et le banc en dessous"),
         ('cups', 'Puis direction la coupe', 'Une échelle de coupes contre des clubs fictifs, de Bronze à Or.', 'L’écran des coupes avec les coupes Bronze, Argent et Or'),
+        ('playoffs', "Puis les playoffs : au meilleur des sept", "Finissez dans les dix premiers : un play-in, puis des séries au meilleur des sept jusqu’à la finale.", "Le tableau des playoffs avec les séries de chaque tour"),
         ('duels', "Défiez d’autres managers", "Choisissez un rival et le match se joue aussitôt. D’autres peuvent défier votre équipe en votre absence.", "L’écran des duels avec les rivaux du jour et leurs cinq de départ"),
     ],
     shots_h="Dans l’app",
@@ -242,7 +246,20 @@ COPY = {
 }
 
 # ----------------------------------------------------------------- helpers
-e = html.escape
+FOOT_LABEL = {"en": "Legal", "es": "Legal", "de": "Rechtliches", "fr": "Informations légales"}
+CUR = {"lang": "en"}
+def e(s, quote=True):
+    """html.escape, y en francés espacio duro antes de : ; ? ! » y después de « (así no queda un signo solo al principio de línea)."""
+    s = html.escape(s, quote)
+    if CUR["lang"] == "fr":
+        s = re.sub(r" ([:;?!»])", r"&nbsp;\1", s).replace("« ", "«&nbsp;")
+    return s
+def in_lang(fn):
+    def w(lang, *a, **k):
+        CUR["lang"] = lang
+        try: return fn(lang, *a, **k)
+        finally: CUR["lang"] = "en"
+    return w
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.join(HERE, "dist", "assets")
 
@@ -309,6 +326,7 @@ def badge(lang, c):
     return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="156" height="52" alt="{e(c["store"])}" draggable="false"></a>'
 
 
+@in_lang
 def landing(lang):
     c = COPY[lang]
     canonical = SITE + PATH[lang]
@@ -357,7 +375,7 @@ def landing(lang):
 {shot(k, a, "inline-phone")}
 </article>''' for k, t, x, a in beat_items)
     rail = ""
-    if len(beat_items) == 4:  # la pila del CSS está hecha para cuatro pantallas
+    if len(beat_items) == 5:  # la pila del CSS está hecha para cinco pantallas
         rail = '<div class="phone-rail" aria-hidden="true"><div class="phone-stack">' + "".join(
             shot(k, "", f"screen s{i}") for i, (k, t, x, a) in enumerate(beat_items)) + "</div></div>"
     faq = "".join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in c["faq"])
@@ -429,7 +447,7 @@ def landing(lang):
 </section>
 </main>
 <footer class="foot wrap">
-<nav class="foot-links" aria-label="Legal"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a>{ln_link}<a href="{LEGAL["support"]}">{e(ls)}</a></nav>
+<nav class="foot-links" aria-label="{e(FOOT_LABEL[lang])}"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a>{ln_link}<a href="{LEGAL["support"]}">{e(ls)}</a></nav>
 <p class="notice">{e(c["notice"])}</p>
 <p class="copy">© 2026 Hoopline GM</p>
 </footer>
@@ -662,6 +680,7 @@ confirm_js = r'''(function () {
 w("assets/confirm.js", confirm_js)
 
 # ----------------------------------------------------------------- Aviso legal / Impressum (solo si LEGAL_PAGES_LIVE)
+@in_lang
 def legal_page(lang):
     d = LN[lang]
     c = COPY[lang]
@@ -713,7 +732,7 @@ def legal_page(lang):
 {body}
 </main>
 <footer class="foot wrap">
-<nav class="foot-links" aria-label="Legal"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a><a href="{LNPATH[lang]}">{e(d["link"])}</a><a href="{LEGAL["support"]}">{e(ls)}</a></nav>
+<nav class="foot-links" aria-label="{e(FOOT_LABEL[lang])}"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a><a href="{LNPATH[lang]}">{e(d["link"])}</a><a href="{LEGAL["support"]}">{e(ls)}</a></nav>
 <p class="copy">© 2026 Hoopline GM</p>
 </footer>
 </body>
