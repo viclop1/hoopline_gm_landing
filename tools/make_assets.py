@@ -7,17 +7,14 @@ Requiere Pillow y fontTools:  pip install pillow fonttools
 Uso:
   python3 tools/make_assets.py --shots "<carpeta 'para App Store'>" [--fonts <carpeta con los TTF de la app>] [--og]
 
-La carpeta de capturas debe tener en/ es/ de/ fr/ con los nombres de la 1.0.1 (01_market, 03_team, 04_box, 05_table;
-en francés 01_market, 02_team, 03_box, 04_table).
-Pantallas sin captura de la App Store en su idioma (es/cups, fr/board): se enmarcan desde la captura cruda con tools/frame_raw.py
-(fuentes en tools/raw-captures/; este script lo hace solo).
+La carpeta de capturas es la de la tienda de la 1.0.6: en/ es/ de/ fr/ con 01.png … 10.png (compuestos de 1320x2868; el mapa pantalla → número está en NUM).
 
 Tipografía: la de la app (Archivo y Barlow, licencia OFL), desde ../hoopline_gm/fonts. Se sirven como subconjunto latino en woff.
-Capturas: 800 px de ancho (nítidas a 2x hasta ≈ 400 px), con el nombre `<idioma>-<pantalla>-800.webp`. El sufijo importa:
-/assets/* se sirve con caché inmutable, así que un archivo nuevo necesita un nombre nuevo.
+Capturas: 800 px de ancho (nítidas a 2x hasta ≈ 400 px), con el nombre `<idioma>-<pantalla>-800-<TAG>.webp`. El sufijo importa:
+/assets/* se sirve con caché inmutable, así que un juego nuevo de capturas necesita un TAG nuevo.
 Recortes (se conserva la parte superior, donde está la información): market 72 %, box y table 76 %; el resto, completas.
 """
-import argparse, os, subprocess, sys
+import argparse, os, sys
 from fontTools import subset
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
@@ -43,38 +40,25 @@ for src, name in FONTS.items():
     f.flavor = "woff"; f.save(os.path.join(OUT, "fonts", name + ".woff"))
 
 # --- capturas: recorte al móvil con esquinas redondeadas y transparencia
-FILES = {l: {"market": "01_market", "team": "03_team", "box": "04_box", "table": "05_table"} for l in ("en", "es", "de")}
-FILES["fr"] = {"market": "01_market", "team": "02_team", "box": "03_box", "table": "04_table"}
-# pantallas de los bloques por función: no todos los idiomas tienen ambas (falta es/cups y fr/board en la carpeta de la App Store)
-FILES["en"].update({"board": "02_board", "cups": "06_cups"})
-FILES["es"].update({"board": "02_board"})
-FILES["de"].update({"board": "02_board", "cups": "06_cups"})
-FILES["fr"].update({"cups": "05_cups"})
-BOX, R, W = (134, 553, 1158, 2716), 128, 800
+# Capturas de tienda de la 1.0.6 (Tienda/iOS/<idioma>/NN.png, 1320x2868, las 10 en los 4 idiomas): 01 mercado, 02 inicio, 03 equipo,
+# 04 pizarra, 05 partido, 06 playoffs, 07 duelos, 08 copas, 09 clasificación, 10 informe de temporada.
+NUM = {"market": 1, "team": 3, "board": 4, "box": 5, "duels": 7, "cups": 8, "table": 9}
+LANGS = ("en", "es", "de", "fr")
+BOX, R, W = (130, 640, 1192, 2782), 130, 800        # el móvil dentro del compuesto (con su borde de 4 px)
+TAG = "v106"                                        # cambia con cada juego de capturas: la caché de /assets es inmutable
 KEEP = {"market": 0.72, "box": 0.76, "table": 0.76}   # parte superior que se conserva (el resto lo tapa el degradado de la web)
 
-def save(im, lang, k):
-    """Recorta por abajo según KEEP y guarda como <idioma>-<pantalla>-800.webp."""
-    keep = KEEP.get(k, 1.0)
-    if keep < 1.0:
-        im = im.crop((0, 0, im.width, round(im.height * keep)))
-    im.save(os.path.join(OUT, "img", f"{lang}-{k}-{W}.webp"), quality=78, method=6)
-
-for lang, m in FILES.items():
-    for k, f in m.items():
-        im = Image.open(os.path.join(a.shots, lang, f + ".png")).convert("RGB").crop(BOX)
+for lang in LANGS:
+    for k, n in NUM.items():
+        im = Image.open(os.path.join(a.shots, lang, f"{n:02d}.png")).convert("RGB").crop(BOX)
         mask = Image.new("L", (im.width * 2, im.height * 2), 0)
         ImageDraw.Draw(mask).rounded_rectangle((2, 2, im.width * 2 - 3, im.height * 2 - 3), radius=R * 2, fill=255)
         im.putalpha(mask.resize(im.size, Image.LANCZOS))
         im = im.resize((W, round(im.height * W / im.width)), Image.LANCZOS)
-        save(im, lang, k)
-
-# es/cups y fr/board: desde la captura cruda, con el marco de otra captura del mismo idioma
-for lang, k, ref in (("es", "cups", "01_market"), ("fr", "board", "01_market")):
-    raw = os.path.join(HERE, "raw-captures", f"{lang}-{k}.png")
-    if os.path.exists(raw):
-        tmp = os.path.join(OUT, "img", f"{lang}-{k}-{W}.webp")
-        subprocess.run([sys.executable, os.path.join(HERE, "frame_raw.py"), raw, os.path.join(a.shots, lang, ref + ".png"), tmp], check=True)
+        keep = KEEP.get(k, 1.0)
+        if keep < 1.0:
+            im = im.crop((0, 0, im.width, round(im.height * keep)))
+        im.save(os.path.join(OUT, "img", f"{lang}-{k}-{W}-{TAG}.webp"), quality=78, method=6)
 
 # --- imagen para redes (1200x630): solo con --og
 if a.og:
@@ -86,7 +70,7 @@ if a.og:
     d.text((72, 300), "in the open", font=F("Archivo-Bold.ttf", 100), fill="#F2F5F8")
     d.text((72, 452), "Draft, bid and build a basketball team.", font=F("Barlow-Regular.ttf", 32), fill="#C9D1DB")
     d.text((72, 494), "A manager game where nothing is hidden.", font=F("Barlow-Regular.ttf", 32), fill="#C9D1DB")
-    ph = Image.open(os.path.join(OUT, "img", f"en-market-{W}.webp")).convert("RGBA"); pw = 380
+    ph = Image.open(os.path.join(OUT, "img", f"en-market-{W}-{TAG}.webp")).convert("RGBA"); pw = 380
     ph = ph.resize((pw, round(ph.height * pw / ph.width)), Image.LANCZOS)
     layer = Image.new("RGBA", (Wd, Ht), (0, 0, 0, 0)); layer.alpha_composite(ph, (770, 90))
     mask = np.full((Ht, Wd), 255, dtype=np.uint8)
