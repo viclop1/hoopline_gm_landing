@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 # Playwright CLI output (may contain credentials)
 .playwright-cli/
+# Auditoría de diseño (informe y maquetas; no es parte de la web)
+design-audit/
