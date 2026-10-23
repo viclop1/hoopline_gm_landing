@@ -52,6 +52,7 @@ COPY = {
     do=[
         "Draft fifteen players over a snake order you can see coming",
         "Bid in a live auction market where rivals bid back",
+        "Challenge other managers’ teams in duels, and let them challenge yours",
         "Finish in the top ten and play for the title: a play-in, then best-of-seven series to the Finals",
         "Search any player, star the ones you follow and get a notification when one goes up for auction",
         "Finish with a season report: your place, your best player, your badges",
@@ -64,6 +65,7 @@ COPY = {
         ('board', 'Your tactics board, before every game', 'Style, defence, pace and who to feed, with your odds moving as you choose.', 'The tactics board with attacking style, defence, pace and focus player options'),
         ("team", "Your five, your call", "Set the court, rest tired starters or let Auto do it.", "The team screen with the starting five on the court and the bench below"),
         ('cups', 'Then take them into a cup', 'A ladder of cups against fictional clubs, from Bronze to Gold.', 'The cups screen with Bronze, Silver and Gold cups'),
+        ('duels', "Challenge other managers", "Pick a rival and the game is played at once. Others can challenge your team while you are away.", "The duels screen with today’s rivals and their starting fives"),
     ],
     shots_h="Inside the app",
     shots=[
@@ -101,6 +103,7 @@ COPY = {
     do=[
         "Draftea quince jugadores con un orden en serpiente que ves venir",
         "Puja en un mercado de subastas en directo donde los rivales responden",
+        "Reta en duelos a los equipos de otros mánagers y deja que reten al tuyo",
         "Acaba entre los diez primeros y juega por el título: play-in y series al mejor de siete hasta la final",
         "Busca cualquier jugador, marca con estrella a los que sigues y recibe un aviso cuando uno salga a subasta",
         "Cierra con el informe de temporada: tu puesto, tu mejor jugador, tus logros",
@@ -113,6 +116,7 @@ COPY = {
         ('board', 'Tu pizarra táctica, antes de cada partido', 'Estilo, defensa, ritmo y a quién buscar, con tus probabilidades moviéndose según eliges.', 'La pizarra táctica con estilo de ataque, defensa, ritmo y jugador clave'),
         ("team", "Tu quinteto, tu decisión", "Monta la pista, da descanso a los cansados o deja que lo haga Auto.", "La pantalla de equipo con el quinteto en la pista y el banquillo debajo"),
         ('cups', 'Después, a por una copa', 'Una escalera de copas contra clubes ficticios, de Bronce a Oro.', 'La pantalla de copas con copas de Bronce, Plata y Oro'),
+        ('duels', "Reta a otros mánagers", "Elige un rival y el partido se juega al instante. Otros pueden retar a tu equipo mientras no estás.", "La pantalla de duelos con los rivales de hoy y sus quintetos"),
     ],
     shots_h="Dentro de la app",
     shots=[
@@ -150,6 +154,7 @@ COPY = {
     do=[
         "Drafte fünfzehn Spieler in einer Snake-Reihenfolge, die du kommen siehst",
         "Biete auf einem Live-Auktionsmarkt, auf dem die Rivalen mitbieten",
+        "Fordere in Duellen die Teams anderer Manager heraus und lass sie deins herausfordern",
         "Schaff es unter die ersten zehn und spiel um den Titel: Play-in, dann Best-of-Seven-Serien bis zu den Finals",
         "Such jeden Spieler, markier die, denen du folgst, und werde benachrichtigt, wenn einer versteigert wird",
         "Zum Schluss der Saisonbericht: dein Platz, dein bester Spieler, deine Erfolge",
@@ -162,6 +167,7 @@ COPY = {
         ('board', 'Deine Taktiktafel, vor jedem Spiel', 'Stil, Verteidigung, Tempo und wen du suchst, und deine Chancen bewegen sich mit jeder Wahl.', 'Die Taktiktafel mit Angriffsstil, Verteidigung, Tempo und Schlüsselspieler'),
         ("team", "Deine Fünf, deine Wahl", "Stell das Feld auf, gib den Müden Pause oder überlass es Auto.", "Der Team-Bildschirm mit der Startfünf auf dem Feld und der Bank darunter"),
         ('cups', 'Dann ab in den Pokal', 'Eine Leiter aus Pokalen gegen fiktive Klubs, von Bronze bis Gold.', 'Der Pokalbildschirm mit Bronze-, Silber- und Gold-Pokalen'),
+        ('duels', "Fordere andere Manager heraus", "Wähl einen Rivalen, das Spiel wird sofort gespielt. Andere können dein Team herausfordern, während du weg bist.", "Der Duell-Bildschirm mit den heutigen Rivalen und ihren Startfünf"),
     ],
     shots_h="In der App",
     shots=[
@@ -199,6 +205,7 @@ COPY = {
     do=[
         "Draftez quinze joueurs dans un ordre en serpentin que vous voyez venir",
         "Enchérissez sur un marché en direct où les rivaux surenchérissent",
+        "Défiez en duel les équipes d’autres managers et laissez-les défier la vôtre",
         "Finissez dans les dix premiers et jouez le titre : un play-in, puis des séries au meilleur des sept jusqu’à la finale",
         "Cherchez n’importe quel joueur, suivez-le d’une étoile et soyez prévenu quand il est mis aux enchères",
         "Terminez par le bilan de saison : votre place, votre meilleur joueur, vos succès",
@@ -211,6 +218,7 @@ COPY = {
         ('board', 'Votre tableau tactique, avant chaque match', 'Style, défense, rythme et qui servir, avec vos chances qui bougent selon vos choix.', 'Le tableau tactique avec style d’attaque, défense, rythme et joueur clé'),
         ("team", "Votre cinq, votre choix", "Composez le terrain, reposez les titulaires fatigués ou laissez Auto s’en charger.", "L’écran équipe avec le cinq de départ sur le terrain et le banc en dessous"),
         ('cups', 'Puis direction la coupe', 'Une échelle de coupes contre des clubs fictifs, de Bronze à Or.', 'L’écran des coupes avec les coupes Bronze, Argent et Or'),
+        ('duels', "Défiez d’autres managers", "Choisissez un rival et le match se joue aussitôt. D’autres peuvent défier votre équipe en votre absence.", "L’écran des duels avec les rivaux du jour et leurs cinq de départ"),
     ],
     shots_h="Dans l’app",
     shots=[
@@ -349,7 +357,7 @@ def landing(lang):
 {shot(k, a, "inline-phone")}
 </article>''' for k, t, x, a in beat_items)
     rail = ""
-    if len(beat_items) == 3:  # la pila del CSS está hecha para tres pantallas
+    if len(beat_items) == 4:  # la pila del CSS está hecha para cuatro pantallas
         rail = '<div class="phone-rail" aria-hidden="true"><div class="phone-stack">' + "".join(
             shot(k, "", f"screen s{i}") for i, (k, t, x, a) in enumerate(beat_items)) + "</div></div>"
     faq = "".join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in c["faq"])
