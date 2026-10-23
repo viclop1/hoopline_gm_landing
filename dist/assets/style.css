@@ -146,11 +146,12 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
 }
 @media (min-width: 1000px) and (min-height: 760px) and (prefers-reduced-motion: no-preference) {
   @supports ((animation-timeline: view()) and (timeline-scope: --x)) {
-    .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: clamp(32px, 6vw, 96px); timeline-scope: --b0, --b1, --b2; }
+    .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: clamp(32px, 6vw, 96px); timeline-scope: --b0, --b1, --b2, --b3; }
     .beat { grid-template-columns: none; min-height: min(82vh, 720px); align-content: center; justify-items: start; max-width: 30rem; gap: 0; }
     .beat:nth-child(1) { view-timeline: --b0 block; }
     .beat:nth-child(2) { view-timeline: --b1 block; }
     .beat:nth-child(3) { view-timeline: --b2 block; }
+    .beat:nth-child(4) { view-timeline: --b3 block; }
     /* la captura inline sigue en el DOM para quien lee con lector de pantalla (su alt), pero no se ve: la pila la sustituye */
     .inline-phone { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); }
     .phone-rail { display: block; position: relative; }
@@ -160,9 +161,11 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
     .s0 { animation: o0 linear both; animation-timeline: --b0; animation-range: cover; }
     .s1 { animation: o1 linear both; animation-timeline: --b1; animation-range: cover; }
     .s2 { animation: o2 linear both; animation-timeline: --b2; animation-range: cover; }
+    .s3 { animation: o3 linear both; animation-timeline: --b3; animation-range: cover; }
     @keyframes o0 { 0%, 66% { opacity: 1; filter: none; } 78%, 100% { opacity: 0; filter: blur(4px); } }
     @keyframes o1 { 0%, 22% { opacity: 0; filter: blur(4px); } 34%, 66% { opacity: 1; filter: none; } 78%, 100% { opacity: 0; filter: blur(4px); } }
-    @keyframes o2 { 0%, 22% { opacity: 1; clip-path: inset(0 0 100% 0 round 44px); } 34%, 100% { opacity: 1; clip-path: inset(0 round 44px); } }
+    @keyframes o2 { 0%, 22% { opacity: 1; clip-path: inset(0 0 100% 0 round 44px); filter: none; } 34%, 66% { opacity: 1; clip-path: inset(0 round 44px); filter: none; } 78%, 100% { opacity: 0; clip-path: inset(0 round 44px); filter: blur(4px); } }
+    @keyframes o3 { 0%, 22% { opacity: 0; filter: blur(4px); } 34%, 100% { opacity: 1; filter: none; } }
   }
 }
 
@@ -177,9 +180,9 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
   .hero-phone img { animation: lift 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
   .faq-list details[open] p { animation: enter 0.18s ease-out both; }
   @supports (animation-timeline: view()) {
-    .pillars li, .shot, .beat:not(:last-child) .inline-phone { animation: enter linear both; animation-timeline: view(); animation-range: entry 5% entry 40%; }
+    .pillars li, .shot, .beat:not(:nth-child(3)) .inline-phone { animation: enter linear both; animation-timeline: view(); animation-range: entry 5% entry 40%; }
     /* el único detalle de Jhey: la escalera de copas se descubre de arriba abajo, de Bronce a Oro */
-    .beat:last-child .inline-phone { animation: climb linear both; animation-timeline: view(); animation-range: entry 10% entry 70%; }
+    .beat:nth-child(3) .inline-phone { animation: climb linear both; animation-timeline: view(); animation-range: entry 10% entry 70%; }
     @keyframes climb { from { clip-path: inset(0 0 100% 0 round 44px); } to { clip-path: inset(0 round 44px); } }
   }
 }
