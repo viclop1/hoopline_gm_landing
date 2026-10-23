@@ -9,7 +9,7 @@ Uso:
 
 La carpeta de capturas es la de la tienda de la 1.0.6: en/ es/ de/ fr/ con 01.png … 10.png (compuestos de 1320x2868; el mapa pantalla → número está en NUM).
 
-Tipografía: la de la app (Archivo y Barlow, licencia OFL), desde ../hoopline_gm/fonts. Se sirven como subconjunto latino en woff.
+Tipografía: la de la app (Archivo y Barlow, licencia OFL), desde ../hoopline_gm/fonts. Se sirven como subconjunto latino en woff2 (solo con --with-fonts; hace falta el módulo brotli: pip install brotli).
 Capturas: 800 px de ancho (nítidas a 2x hasta ≈ 400 px), con el nombre `<idioma>-<pantalla>-800-<TAG>.webp`. El sufijo importa:
 /assets/* se sirve con caché inmutable, así que un juego nuevo de capturas necesita un TAG nuevo.
 Recortes (se conserva la parte superior, donde está la información): market 72 %, box y table 76 %; el resto, completas.
@@ -25,19 +25,20 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--shots", required=True)
 ap.add_argument("--fonts", default=os.path.join(HERE, "..", "..", "hoopline_gm", "fonts"))
 ap.add_argument("--out", default=os.path.join(HERE, "..", "dist", "assets"))
+ap.add_argument("--with-fonts", action="store_true", help="regenera las fuentes (por defecto no se tocan)")
 ap.add_argument("--og", action="store_true", help="regenera también og.png (por defecto no se toca)")
 a = ap.parse_args()
 OUT = os.path.abspath(a.out)
 os.makedirs(os.path.join(OUT, "fonts"), exist_ok=True)
 os.makedirs(os.path.join(OUT, "img"), exist_ok=True)
 
-# --- fuentes: subconjunto latino, formato woff
+# --- fuentes: subconjunto latino, formato woff2 (solo con --with-fonts)
 FONTS = {"Archivo-Bold.ttf": "archivo-700", "Archivo-SemiBold.ttf": "archivo-600", "Barlow-Regular.ttf": "barlow-400", "Barlow-SemiBold.ttf": "barlow-600"}
 UNI = list(range(0x20, 0x7F)) + list(range(0xA0, 0x180)) + [0x2013, 0x2014, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2026, 0x20AC, 0x2192, 0x2190, 0x2212, 0x2713, 0xD7, 0x192]
-for src, name in FONTS.items():
-    o = subset.Options(); o.flavor = "woff"; o.layout_features = ["*"]; o.name_IDs = [1, 2, 3, 4, 6]; o.notdef_outline = True
+for src, name in (FONTS.items() if a.with_fonts else ()):
+    o = subset.Options(); o.flavor = "woff2"; o.layout_features = ["*"]; o.name_IDs = [1, 2, 3, 4, 6]; o.notdef_outline = True
     f = TTFont(os.path.join(a.fonts, src)); s = subset.Subsetter(o); s.populate(unicodes=UNI); s.subset(f)
-    f.flavor = "woff"; f.save(os.path.join(OUT, "fonts", name + ".woff"))
+    f.flavor = "woff2"; f.save(os.path.join(OUT, "fonts", name + ".woff2"))
 
 # --- capturas: recorte al móvil con esquinas redondeadas y transparencia
 # Capturas de tienda de la 1.0.6 (Tienda/iOS/<idioma>/NN.png, 1320x2868, las 10 en los 4 idiomas): 01 mercado, 02 inicio, 03 equipo,
