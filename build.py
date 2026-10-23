@@ -330,7 +330,7 @@ def landing(lang):
     do = "".join(f"<li>{e(x)}</li>" for x in c["do"])
     def shot(key, alt, cls="", **attrs):
         """<img> de una captura de 800 px con su tamaño real. Por defecto carga diferida."""
-        name = f"{lang}-{key}-800.webp"
+        name = f"{lang}-{key}-800-v106.webp"
         wd, ht = webp_size(name)
         extra = " ".join(f'{k.replace("_", "-")}="{v}"' for k, v in attrs.items()) or 'loading="lazy"'
         klass = f' class="{cls}"' if cls else ""
@@ -343,7 +343,7 @@ def landing(lang):
 </figure>'''
     # "Escenario": cada función es un tiempo. En escritorio una pila de móviles se queda fija y cambia de pantalla con el scroll (solo CSS);
     # en móvil, con movimiento reducido o sin soporte, cada función lleva su móvil al lado (las capturas inline) y la pila no se muestra.
-    beat_items = [(k, t, x, a) for k, t, x, a in c["feats"] if os.path.exists(os.path.join(ASSETS, "img", f"{lang}-{k}-800.webp"))]
+    beat_items = [(k, t, x, a) for k, t, x, a in c["feats"] if os.path.exists(os.path.join(ASSETS, "img", f"{lang}-{k}-800-v106.webp"))]
     beats = "".join(f'''<article class="beat">
 <div class="beat-text"><h2>{e(t)}</h2><p>{e(x)}</p></div>
 {shot(k, a, "inline-phone")}

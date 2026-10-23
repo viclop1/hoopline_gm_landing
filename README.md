@@ -9,7 +9,7 @@ build.py              genera las páginas HTML en dist/ (Python estándar, sin i
 dist/                 lo que se publica (se sube tal cual a Cloudflare)
   assets/style.css      estilos (a mano)
   assets/confirm.js     lógica de /auth/confirm (a mano; la genera build.py con la URL y la clave de Supabase)
-  assets/fonts, img     fuentes Archivo y Barlow (las de la app) y capturas de 800 px recortadas, con sufijo -800 por la caché inmutable (las genera tools/make_assets.py)
+  assets/fonts, img     fuentes Archivo y Barlow (las de la app) y capturas de 800 px recortadas, con sufijo -800-<TAG> (hoy v106) por la caché inmutable (las genera tools/make_assets.py)
   _headers              cabeceras de seguridad de Cloudflare
 emails/               plantillas de correo de Supabase (enlace-supabase / enlace-propio) y su generador
 tools/make_assets.py  regenera fuentes, capturas y la imagen para redes (solo si cambian las capturas)
