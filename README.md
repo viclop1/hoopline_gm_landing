@@ -9,7 +9,7 @@ build.py              genera las páginas HTML en dist/ (Python estándar, sin i
 dist/                 lo que se publica (se sube tal cual a Cloudflare)
   assets/style.css      estilos (a mano)
   assets/confirm.js     lógica de /auth/confirm (a mano; la genera build.py con la URL y la clave de Supabase)
-  assets/fonts, img     fuentes Archivo y Barlow (las de la app) y capturas de 800 px recortadas, con sufijo -800-<TAG> (hoy v106) por la caché inmutable (las genera tools/make_assets.py)
+  assets/fonts, img     fuentes Archivo y Barlow en woff2 (las de la app) y capturas de 800 px recortadas, con sufijo -800-<TAG> (hoy v106) por la caché inmutable (las genera tools/make_assets.py)
   _headers              cabeceras de seguridad de Cloudflare
 emails/               plantillas de correo de Supabase (enlace-supabase / enlace-propio) y su generador
 tools/make_assets.py  regenera fuentes, capturas y la imagen para redes (solo si cambian las capturas)
@@ -62,3 +62,7 @@ El apartado de la web de la política de privacidad (sección 8) está en el rep
 - «Funciones» es un escenario: en escritorio (≥ 1000 px de ancho y ≥ 760 de alto, con `animation-timeline: view()` y movimiento permitido) un móvil fijo cambia de pantalla según la función que pasa; en el resto, cada función lleva su móvil al lado. Todo es CSS, sin JS.
 - `/assets/*` se sirve con caché inmutable: si cambias una captura, cámbiale el nombre; el CSS se versiona solo (`style.css?v=<huella>`, la calcula build.py).
 - Informe y maquetas del rediseño: `design-audit/` (sin versionar).
+
+## Antes de subir
+
+`python3 build.py && python3 tools/check_dist.py` — el segundo comprueba enlaces y recursos, imágenes con tamaño y alt, CSP (nada en línea), versión de la hoja de estilos, precargas y que las cuatro portadas tengan las mismas imágenes. Sale con código 1 si algo falla.

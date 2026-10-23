@@ -1,8 +1,8 @@
 /* Hoopline GM — landing. Paleta y tipografía tomadas de la app (hoopline_theme.dart, esquema oscuro; Archivo + Barlow). */
-@font-face { font-family: "Archivo"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/fonts/archivo-700.woff") format("woff"); }
-@font-face { font-family: "Archivo"; font-weight: 600; font-style: normal; font-display: swap; src: url("/assets/fonts/archivo-600.woff") format("woff"); }
-@font-face { font-family: "Barlow"; font-weight: 400; font-style: normal; font-display: swap; src: url("/assets/fonts/barlow-400.woff") format("woff"); }
-@font-face { font-family: "Barlow"; font-weight: 600; font-style: normal; font-display: swap; src: url("/assets/fonts/barlow-600.woff") format("woff"); }
+@font-face { font-family: "Archivo"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/fonts/archivo-700.woff2") format("woff2"); }
+@font-face { font-family: "Archivo"; font-weight: 600; font-style: normal; font-display: swap; src: url("/assets/fonts/archivo-600.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 400; font-style: normal; font-display: swap; src: url("/assets/fonts/barlow-400.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 600; font-style: normal; font-display: swap; src: url("/assets/fonts/barlow-600.woff2") format("woff2"); }
 /* tipos de reserva con las métricas de Archivo y Barlow: el texto no salta cuando llega la fuente */
 @font-face { font-family: "Archivo Fallback"; font-weight: 600 700; src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("Helvetica Bold"); size-adjust: 97.9%; ascent-override: 89.7%; descent-override: 21.5%; line-gap-override: 0%; }
 @font-face { font-family: "Barlow Fallback"; font-weight: 400; src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica"); size-adjust: 95.8%; ascent-override: 104.4%; descent-override: 20.9%; line-gap-override: 0%; }
