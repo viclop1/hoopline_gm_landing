@@ -1,76 +1,70 @@
-# hoopline_gm_landing
+# Hoopline GM website
 
-Web de [hooplinegm.com](https://hooplinegm.com): landing de Hoopline GM en cuatro idiomas (EN, ES, DE, FR), página de confirmación de correo
-(`/auth/confirm`) y plantillas de correo de Supabase. HTML y CSS estáticos, **sin dependencias**.
+Source of the website for **Hoopline GM**, a free basketball manager game for iOS: draft, bid in a live auction market and build a team. The site is a static landing page in four languages (English, Spanish, German, French), with legal notice pages and the page that confirms account emails.
 
-## Estructura
+- Website: [hooplinegm.com](https://hooplinegm.com)
+- App Store: [apps.apple.com/app/id6809042395](https://apps.apple.com/app/id6809042395)
+
+The Hoopline GM app source code is private.
+
+## Stack
+
+- Plain HTML and CSS, with one small script for the account confirmation page. No front-end framework and no runtime dependencies.
+- `build.py` generates the pages. It uses only the Python standard library (Python 3).
+- `tools/` contains optional helpers for images and checks. `make_assets.py` and `make_icons.py` need extra Python packages and are only run when the screenshots or icons change.
+
+## Run locally
+
+```sh
+python3 build.py              # regenerates the pages in dist/
+python3 tools/check_dist.py   # validates links, resources, image sizes, CSP and more
+cd dist && python3 -m http.server 8000
 ```
-build.py              genera las páginas HTML en dist/ (Python estándar, sin instalar nada)
-dist/                 lo que se publica (se sube tal cual a Cloudflare)
-  assets/style.css      estilos (a mano)
-  assets/confirm.js     lógica de /auth/confirm (a mano; la genera build.py con la URL y la clave de Supabase)
-  assets/fonts, img     fuentes Archivo y Barlow en woff2 (las de la app) y capturas de 800 px recortadas, con sufijo -800-<TAG> (hoy v106) por la caché inmutable (las genera tools/make_assets.py)
-  _headers              cabeceras de seguridad de Cloudflare
-emails/               plantillas de correo de Supabase (enlace-supabase / enlace-propio) y su generador
-tools/make_assets.py  regenera fuentes, capturas y la imagen para redes (solo si cambian las capturas)
+
+Then open http://localhost:8000. The `_headers` file is a Cloudflare feature and is not applied by the local server.
+
+Text, links and configuration live in the `CONFIG` and `COPY` sections of `build.py`. Styles are in `dist/assets/style.css`.
+
+## Project structure
+
+```
+build.py            generates the pages, sitemap, robots.txt and _headers into dist/
+legalnotice.py      legal notice texts in four languages, used by build.py
+dist/               what gets published (committed)
+  index.html          English home page (es/, de/, fr/ hold the other languages)
+  <lang>/legal/       legal notice pages
+  auth/confirm/       account email confirmation page
+  assets/             style.css, confirm.js, fonts (woff2), images (WebP, SVG), hero clips, social images
+  _headers            security and caching headers
+  404.html, robots.txt, sitemap.xml, icons
+emails/             HTML templates for the authentication emails (four languages per email) and their generator
+tools/              make_assets.py, make_icons.py, check_dist.py
 ```
 
-## Día a día
-1. Edita textos, enlaces o configuración en `build.py` (secciones CONFIG y COPY) o los estilos en `dist/assets/style.css`.
-2. `python3 build.py`
-3. Para verlo en local: `cd dist && python3 -m http.server 8000` y abre http://localhost:8000
-4. Publica el contenido de `dist/` (ver abajo).
+## Design and front-end notes
 
-`build.py` reescribe los `index.html`, `404.html`, `auth/confirm/index.html`, `assets/confirm.js`, `robots.txt`, `sitemap.xml`, `_headers`.
-No toca `assets/style.css`, `fonts` ni `img`.
+- On wide screens with scroll-driven animation support, the feature section is a sticky phone whose screen changes as the user scrolls. On narrow screens the same content is a horizontal scroll-snap carousel. Without support, or with reduced motion, it falls back to a plain layout.
+- Animations respect `prefers-reduced-motion`.
+- Images are WebP with explicit width and height. Fonts are self-hosted woff2.
+- The hero can show a short muted looping clip per language (`dist/assets/video/<lang>-hero-v1.mp4`) over the still image.
 
-## Publicación (Cloudflare, proyecto `hooplinegm`)
-- **Ahora:** subida manual del contenido de `dist/` (Assets directory `/`, HTML handling `auto-trailing-slash`, Not found handling `404-page`).
-  Dominio en Settings → Domains & Routes.
-- **Despliegue automático desde este repo (opcional):** conectar el repo en el proyecto de Cloudflare, sin comando de build y con `dist` como
-  carpeta de assets. Como `dist/` va en el repo, cada `git push` publicaría. Hazlo solo si quieres ese flujo.
+## Deployment
 
-## /auth/confirm
-Confirma con `POST {SUPABASE_URL}/auth/v1/verify` (`token_hash` y `type`) con la clave pública, sin librerías. Registro y cambio de correo: confirma y
-ofrece abrir la app (`com.hooplinegm.app://login-callback/`, solo en móvil). Recuperar contraseña: formulario en la propia web (`PUT /auth/v1/user`).
-Hay que pulsar un botón antes de confirmar (los escáneres de correo no gastan el enlace) y el token se quita de la barra de direcciones.
-La clave `sb_publishable_…` es pública por diseño; **nunca** pongas aquí la secret ni la `service_role`.
-Site URL y Redirect URLs de Supabase no cambian (`com.hooplinegm.app://login-callback/`).
+The contents of `dist/` are served as static assets on Cloudflare. `dist/` is committed and a push to the repository deploys automatically, so what is in the repository is what is published; there is no build step on the server. Security headers and caching are configured in `dist/_headers`, which `build.py` writes.
 
-## Correos de Supabase
-`python3 emails/build_emails.py emails` regenera `emails/enlace-supabase/` y `emails/enlace-propio/` (más `subjects.json`). Detalle y dónde pegar cada una en `emails/LEEME.md`.
-Con `enlace-propio` el botón va a `https://hooplinegm.com/auth/confirm?token_hash=…&type=…`.
+Assets under `/assets/` are cached for a year as immutable, so a changed image, clip or social image gets a new file name, and the stylesheet link carries a content hash.
 
-## Reglas de contenido (abogado)
-Sin "NBA", sin logos ni nombres de franquicias, sin jugadores reales como reclamo, capturas solo de pantallas funcionales, y el aviso de independencia
-en el pie. Los textos salen de `aso-listing.md` (Project APP NBA) y están revisados; los textos nuevos en FR y DE son de Claude y no los ha revisado una persona nativa.
+## SEO and special pages
 
-## Pendiente
-- Soporte: el pie enlaza a `mailto:hooplinegm@gmail.com`; confirmar si debe haber una página de soporte (`LEGAL["support"]` y `help_a` en `build.py`).
-- Aviso legal / Impressum: consultarlo con el abogado (hay versión en alemán).
-- ~~Favicon~~ hecho: icono de la app. Para cambiarlo, sustituye `tools/app-icon-1024.png` y ejecuta `python3 tools/make_icons.py`.
-- Los textos y capturas son de la 1.0.1: comprobar que está aprobada en App Store.
+- Each page has a canonical URL, `hreflang` alternates (including `x-default`), Open Graph and Twitter tags, and a per-language social image.
+- The home pages include JSON-LD structured data (`MobileApplication`).
+- `sitemap.xml` lists the public pages. `robots.txt` disallows `/auth/`.
+- `/auth/confirm` is the page that account emails link to. It reads a one-time token from the link, removes it from the address bar and only confirms after the user presses a button, so email scanners that open links do not consume it. After a sign-up or email change it offers to open the app; for password recovery it shows a form to choose a new password. The page is `noindex`, served with `no-store` and `no-referrer`.
+- `404.html` is also `noindex`.
 
-## Aviso legal / Impressum
+## Security
 
-Aprobado por el abogado el 08/10/2026. El contenido está en `legalnotice.py` y `build.py` genera `/legal/`, `/es/legal/`, `/de/legal/` y `/fr/legal/`, con el enlace en el pie, el sitemap y el hreflang. Para generar la web sin ellos: `HOOPLINE_LEGAL_LIVE=0 python3 build.py`. Texto aprobado en Word: `legal-drafts/`.
+- Content Security Policy that restricts scripts, styles, images and fonts to the site itself, plus `nosniff`, a restrictive `Permissions-Policy` and `frame-ancestors 'none'`. The only external connection allowed is the authentication service used by the confirmation page.
+- No inline scripts or styles; `tools/check_dist.py` enforces this.
 
-El apartado de la web de la política de privacidad (sección 8) está en el repo `hoopline-gm-legal` y en `legal/index.html` del repo de la app, y como referencia en `legalnotice.py` (`PRIVACY_WEB_SECTION`).
-
-## Diseño (versión «Escenario», 19/10/2026)
-- Tipografía y colores salen de la app (`../hoopline_gm/DESIGN.md`): Archivo para titulares, Barlow para texto, acento solo en acciones.
-- «Funciones» es un escenario: en escritorio (≥ 1000 px de ancho y ≥ 760 de alto, con `animation-timeline: view()` y movimiento permitido) un móvil fijo cambia de pantalla según la función que pasa; en el resto, cada función lleva su móvil al lado. Todo es CSS, sin JS.
-- `/assets/*` se sirve con caché inmutable: si cambias una captura, cámbiale el nombre; el CSS se versiona solo (`style.css?v=<huella>`, la calcula build.py).
-- Informe y maquetas del rediseño: `design-audit/` (sin versionar).
-
-## Antes de subir
-
-`python3 build.py && python3 tools/check_dist.py` — el segundo comprueba enlaces y recursos, imágenes con tamaño y alt, CSP (nada en línea), versión de la hoja de estilos, precargas y que las cuatro portadas tengan las mismas imágenes. Sale con código 1 si algo falla.
-
-## Licencias de las fuentes
-
-Archivo (Omnibus-Type) y Barlow (Jeremy Tribby) se distribuyen con la licencia SIL Open Font License 1.1 (https://openfontlicense.org). Los ficheros de `dist/assets/fonts/` son un subconjunto latino en woff2 de los TTF de `../hoopline_gm/fonts`; la licencia de cada familia va con esos TTF. Se sirven desde nuestro propio dominio.
-
-## Clip del hero
-
-`dist/assets/video/<idioma>-hero-v1.mp4` (800×1162, H.264, sin audio, ≈ 300 KB). Si existe, `build.py` lo pone encima de la captura del hero (autoplay, mudo, bucle); con «reducir movimiento» se oculta y queda la captura. Hoy solo existe `es`. Para otro idioma: misma grabación con la app en ese idioma y `ffmpeg` con el recorte `crop=1080:1568:0:140,scale=800:1162` (quita barra de estado y cinta DEBUG).
+All rights reserved.
