@@ -12,6 +12,7 @@ import html, os, json, re
 SITE = "https://hooplinegm.com"
 APP_STORE = "https://apps.apple.com/app/id6809042395"
 APP_STORE_ID = "6809042395"
+PLAY_STORE = "https://play.google.com/store/apps/details?id=com.hooplinegm.app"
 SUPABASE_URL = "https://qllwdtrmzlisyfaznoml.supabase.co"
 SUPABASE_KEY = "sb_publishable_rIDDRy1qk65YFKYj_moGHA_Coha3u2C"  # clave pública, apta para el navegador
 OPEN_APP_URL = "com.hooplinegm.app://login-callback/"
@@ -41,7 +42,8 @@ COPY = {
     h1="Every bid in the open",
     lead="Draft, bid and build a basketball team. A manager game where nothing is hidden.",
     store="Download on the App Store",
-    android="The Android version is in testing.",
+    play="Get it on Google Play",
+    play_tm="Google Play and the Google Play logo are trademarks of Google LLC.",
     open_title="Run a basketball club the way you would want the market to work: in the open.",
     pillars=[
         ("Every bid is public", "Bid in a live auction market where rivals bid back."),
@@ -77,7 +79,7 @@ COPY = {
     faq_h="Questions",
     faq=[
         ("Is it free?", "Yes, you can play without paying. Optional purchases cover time and appearance, and none of them makes your squad better."),
-        ("Which devices does it run on?", "On iPhone now. The Android version is in testing."),
+        ("Which devices does it run on?", "On iPhone and Android. Get it on the App Store or Google Play."),
         ("Is it connected to a real league?", "No. Hoopline GM is an independent game. All teams, arenas and competitions are fictional, and real players appear by name with publicly available statistics."),
     ],
     help_q="Need help?", help_a="Write to us by email",
@@ -93,7 +95,8 @@ COPY = {
     h1="Cada puja, a la vista",
     lead="Draftea, puja y arma tu equipo de baloncesto. Un mánager sin trampas ocultas.",
     store="Descargar en la App Store",
-    android="La versión de Android está en pruebas.",
+    play="Disponible en Google Play",
+    play_tm="Google Play y el logotipo de Google Play son marcas de Google LLC.",
     open_title="Dirige un club de baloncesto con un mercado como debería ser: a la vista.",
     pillars=[
         ("Cada puja es pública", "Puja en un mercado de subastas en directo donde los rivales responden."),
@@ -129,7 +132,7 @@ COPY = {
     faq_h="Preguntas",
     faq=[
         ("¿Es gratis?", "Sí, puedes jugar sin pagar. Las compras opcionales son de tiempo y aspecto, y ninguna mejora a tu equipo."),
-        ("¿En qué dispositivos funciona?", "En iPhone ya. La versión de Android está en pruebas."),
+        ("¿En qué dispositivos funciona?", "En iPhone y en Android. Descárgalo en la App Store o en Google Play."),
         ("¿Está conectado a una liga real?", "No. Hoopline GM es un juego independiente. Todos los equipos, pabellones y competiciones son ficticios, y los jugadores reales aparecen por su nombre con estadísticas públicas."),
     ],
     help_q="¿Necesitas ayuda?", help_a="Escríbenos por correo",
@@ -145,7 +148,8 @@ COPY = {
     h1="Jedes Gebot offen",
     lead="Drafte, biete, bau dein Basketballteam. Manager-Spiel ohne versteckte Regeln.",
     store="Laden im App Store",
-    android="Die Android-Version ist in der Testphase.",
+    play="Jetzt bei Google Play",
+    play_tm="Google Play und das Google Play-Logo sind Marken von Google LLC.",
     open_title="Führe einen Basketballclub mit einem Markt, wie er sein sollte: offen.",
     pillars=[
         ("Jedes Gebot ist öffentlich", "Biete auf einem Live-Auktionsmarkt, auf dem die Rivalen mitbieten."),
@@ -181,7 +185,7 @@ COPY = {
     faq_h="Fragen",
     faq=[
         ("Ist es kostenlos?", "Ja, du kannst ohne Bezahlung spielen. Optionale Käufe betreffen Zeit und Aussehen, und keiner macht dein Team besser."),
-        ("Auf welchen Geräten läuft es?", "Auf dem iPhone. Die Android-Version ist in der Testphase."),
+        ("Auf welchen Geräten läuft es?", "Auf iPhone und Android. Du findest es im App Store und bei Google Play."),
         ("Gehört es zu einer echten Liga?", "Nein. Hoopline GM ist ein unabhängiges Spiel. Alle Teams, Hallen und Wettbewerbe sind erfunden; echte Spieler erscheinen mit Namen und öffentlich verfügbaren Statistiken."),
     ],
     help_q="Brauchst du Hilfe?", help_a="Schreib uns per E-Mail",
@@ -197,7 +201,8 @@ COPY = {
     h1="Chaque enchère, à découvert",
     lead="Draftez, enchérissez, bâtissez votre équipe de basket. Un manager transparent.",
     store="Télécharger dans l’App Store",
-    android="La version Android est en cours de test.",
+    play="Disponible sur Google Play",
+    play_tm="Google Play et le logo Google Play sont des marques de Google LLC.",
     open_title="Dirigez un club de basket avec un marché comme il devrait être : à découvert.",
     pillars=[
         ("Chaque enchère est publique", "Enchérissez sur un marché en direct où les rivaux surenchérissent."),
@@ -233,7 +238,7 @@ COPY = {
     faq_h="Questions",
     faq=[
         ("Est-ce gratuit ?", "Oui, vous pouvez jouer sans payer. Les achats facultatifs portent sur le temps et l’apparence, et aucun ne rend votre équipe meilleure."),
-        ("Sur quels appareils ça fonctionne ?", "Sur iPhone dès maintenant. La version Android est en cours de test."),
+        ("Sur quels appareils ça fonctionne ?", "Sur iPhone et sur Android. Il est disponible sur l’App Store et sur Google Play."),
         ("Est-ce lié à une vraie ligue ?", "Non. Hoopline GM est un jeu indépendant. Toutes les équipes, salles et compétitions sont fictives, et les vrais joueurs apparaissent avec leur nom et des statistiques publiques."),
     ],
     help_q="Besoin d’aide ?", help_a="Écrivez-nous par e-mail",
@@ -318,16 +323,33 @@ def head_common(lang, title, desc, canonical, extra=""):
 {extra}'''
 
 # ----------------------------------------------------------------- landing
-def badge(lang, c):
-    """Insignia de la App Store. Usa, por orden, la oficial del idioma (SVG o PNG) y, si no está, la inglesa en SVG."""
+def _badge_file(prefix, lang):
+    """Insignia oficial por idioma (SVG o PNG); si falta, la inglesa. Devuelve (nombre, ancho a 52 px de alto)."""
     here = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist", "assets", "img")
-    name = next((n for n in (f"app-store-badge-{lang}.svg", f"app-store-badge-{lang}.png", "app-store-badge-en.svg")
-                 if os.path.exists(os.path.join(here, n))), "app-store-badge-en.svg")
+    fallback = f"{prefix}-en.svg"
+    name = next((n for n in (f"{prefix}-{lang}.svg", f"{prefix}-{lang}.png", fallback)
+                 if os.path.exists(os.path.join(here, n))), fallback)
     wd = 156
-    if name.endswith(".svg"):  # el ancho sale del SVG de Apple (las insignias localizadas no miden igual): 52 px de alto
+    if name.endswith(".svg"):  # el ancho sale del SVG oficial (las insignias localizadas no miden igual): 52 px de alto
         m = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', open(os.path.join(here, name), encoding="utf-8").read(2000))
         if m: wd = round(52 * float(m.group(1)) / float(m.group(2)))
+    return name, wd
+
+
+def badge(lang, c):
+    """Insignia de la App Store."""
+    name, wd = _badge_file("app-store-badge", lang)
     return f'<a class="badge" href="{APP_STORE}"><img src="/assets/img/{name}" width="{wd}" height="52" alt="{e(c["store"])}" draggable="false"></a>'
+
+
+def play_badge(lang, c):
+    """Insignia de Google Play (oficial, sin modificar)."""
+    name, wd = _badge_file("google-play-badge", lang)
+    return f'<a class="badge" href="{PLAY_STORE}"><img src="/assets/img/{name}" width="{wd}" height="52" alt="{e(c["play"])}" draggable="false"></a>'
+
+
+def badges(lang, c):
+    return badge(lang, c) + play_badge(lang, c)
 
 
 @in_lang
@@ -336,8 +358,8 @@ def landing(lang):
     canonical = SITE + PATH[lang]
     ld = {
         "@context": "https://schema.org", "@type": "MobileApplication", "name": "Hoopline GM",
-        "operatingSystem": "iOS", "applicationCategory": "GameApplication",
-        "description": c["desc"], "url": canonical, "downloadUrl": APP_STORE, "inLanguage": lang,
+        "operatingSystem": "iOS, Android", "applicationCategory": "GameApplication",
+        "description": c["desc"], "url": canonical, "downloadUrl": [APP_STORE, PLAY_STORE], "inLanguage": lang,
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
     }
     extra = f'''<link rel="canonical" href="{canonical}">
@@ -406,8 +428,7 @@ def landing(lang):
 <div class="hero-text">
 <h1>{e(c["h1"])}</h1>
 <p class="lead">{e(c["lead"])}</p>
-<p class="cta-row">{badge(lang, c)}</p>
-<p class="note">{e(c["android"])}</p>
+<p class="cta-row">{badges(lang, c)}</p>
 </div>
 <div class="hero-phone">{shot("market", c["market_alt"], fetchpriority="high")}{hero_video}</div>
 </section>
@@ -452,12 +473,13 @@ def landing(lang):
 
 <section class="end wrap">
 <h2>{e(c["cta_h"])}</h2>
-<p class="cta-row">{badge(lang, c)}</p>
+<p class="cta-row">{badges(lang, c)}</p>
 </section>
 </main>
 <footer class="foot wrap">
 <nav class="foot-links" aria-label="{e(FOOT_LABEL[lang])}"><a href="{LEGAL["privacy"]}">{e(lp)}</a><a href="{LEGAL["terms"]}">{e(lt)}</a>{ln_link}<a href="{LEGAL["support"]}">{e(ls)}</a></nav>
 <p class="notice">{e(c["notice"])}</p>
+<p class="notice">{e(c["play_tm"])}</p>
 <p class="copy">© 2026 Hoopline GM</p>
 </footer>
 </body>

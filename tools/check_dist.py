@@ -79,7 +79,7 @@ for pg in sorted(pages):
     if re.search(r"\bNBA\b", text) and not rel.startswith("legal") and "/legal/" not in rel:
         err(f"{rel}: aparece «NBA» en el texto visible")
     if rel in ("index.html", "es/index.html", "de/index.html", "fr/index.html"):
-        shots = [i for i in p.imgs if "app-store-badge" not in i["src"]]  # las insignias llevan el idioma en el nombre y pueden faltar
+        shots = [i for i in p.imgs if "app-store-badge" not in i["src"] and "google-play-badge" not in i["src"]]  # las insignias llevan el idioma en el nombre y pueden faltar
         structure[rel] = (len(shots), [os.path.basename(i["src"]).split("-", 1)[1] for i in shots])
 if len(structure) == 4:
     ref = next(iter(structure.values()))

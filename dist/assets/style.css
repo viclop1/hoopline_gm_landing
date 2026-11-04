@@ -75,7 +75,7 @@ h3 { font: 600 1.25rem/1.3 var(--display); letter-spacing: -0.005em; }
 .hero::after { content: ""; position: absolute; right: 0; top: 8%; width: 60%; aspect-ratio: 1; background: radial-gradient(closest-side, rgba(139, 123, 255, 0.30), rgba(139, 123, 255, 0.08) 60%, transparent); z-index: -1; pointer-events: none; }
 .hero-text { align-self: center; padding-bottom: var(--s12); }
 .lead { margin-top: 24px; max-width: 30ch; color: var(--soft); font-size: clamp(1.25rem, 2vw, 1.5rem); line-height: 1.4; }
-.cta-row { margin-top: 36px; }
+.cta-row { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px 14px; align-items: center; }
 .hero-video { position: absolute; inset: 0 auto auto 0; width: 100%; height: auto; aspect-ratio: 800 / 1162; border: 1px solid var(--line-strong); border-radius: 12.2% 12.2% 0 0 / 8.4% 8.4% 0 0; background: var(--ink); pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .hero-video { display: none; } }
 .badge { display: inline-block; line-height: 0; border-radius: 10px; transition: transform 0.12s cubic-bezier(0.2, 0.7, 0.2, 1); }
