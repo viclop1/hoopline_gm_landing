@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "W9BXYM4UV9.com.hooplinegm.app"
+        ],
+        "components": [
+          {
+            "/": "/i/*"
+          }
+        ]
+      }
+    ]
+  }
+}

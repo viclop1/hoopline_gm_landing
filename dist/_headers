@@ -10,3 +10,10 @@
   Referrer-Policy: no-referrer
   Cache-Control: no-store
   X-Robots-Tag: noindex
+
+/i/*
+  Referrer-Policy: no-referrer
+  X-Robots-Tag: noindex
+
+/.well-known/apple-app-site-association
+  Content-Type: application/json

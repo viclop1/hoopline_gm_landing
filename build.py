@@ -774,6 +774,141 @@ if LEGAL_PAGES_LIVE:
     for l in LANGS:
         w(LNPATH[l].strip("/") + "/index.html", legal_page(l))
 
+# ----------------------------------------------------------------- /i/<código>: invitación (P2, 05/11/2026)
+# Lo que comparte un mánager desde Más → Amigos es https://hooplinegm.com/i/HGM-XXXX-XXXX. Mientras no estén
+# los enlaces universales (Associated Domains en el App ID y assetlinks.json con la huella de firma de Play),
+# esta página es el puente: el código para copiar, «Abrir en la app» (el esquema propio de la app, como en
+# /auth/confirm) y las dos tiendas. Una sola página para cualquier código (_redirects la sirve en /i/*); el
+# idioma sale del navegador. Sin la camiseta «Invitación» en el texto: la promoción puede cerrarse y la
+# página no lo sabe; la app ya lo dice donde toca.
+TEAM_ID = "W9BXYM4UV9"
+BUNDLE_ID = "com.hooplinegm.app"
+INVITE_APP_URL = BUNDLE_ID + "://invite/"
+INVITE_JS = "assets/invite-v1.js"  # /assets/* es inmutable: si cambia, otro nombre
+
+_inv_badges = {}
+for _l in LANGS:
+    _as, _asw = _badge_file("app-store-badge", _l)
+    _gp, _gpw = _badge_file("google-play-badge", _l)
+    _inv_badges[_l] = {"as": _as, "asw": _asw, "asa": COPY[_l]["store"], "gp": _gp, "gpw": _gpw, "gpa": COPY[_l]["play"]}
+
+_b = _inv_badges["en"]
+INVITE_HEAD = head_common("en", "Hoopline GM", "Hoopline GM", SITE + "/i/", '<meta name="robots" content="noindex, nofollow">\n<meta name="referrer" content="no-referrer">')
+invite_html = f"""<!doctype html>
+<html lang="en">
+<head>
+{INVITE_HEAD}</head>
+<body class="auth">
+<header class="top wrap"><a class="brand" translate="no" href="/">Hoopline GM</a></header>
+<main class="auth-main wrap">
+<div class="auth-card" aria-live="polite">
+<h1 id="t"></h1>
+<p id="p"></p>
+<p class="invite-code" id="code" translate="no" hidden></p>
+<p class="actions">
+<a class="btn" id="open" href="{INVITE_APP_URL}" hidden></a>
+<button class="btn btn-ghost" type="button" id="copy" hidden></button>
+</p>
+<p class="note" id="n"></p>
+<p class="cta-row"><a class="badge" href="{APP_STORE}"><img id="as" src="/assets/img/{_b['as']}" width="{_b['asw']}" height="52" alt="{e(_b['asa'])}" draggable="false"></a><a class="badge" href="{PLAY_STORE}"><img id="gp" src="/assets/img/{_b['gp']}" width="{_b['gpw']}" height="52" alt="{e(_b['gpa'])}" draggable="false"></a></p>
+</div>
+</main>
+<script src="/{INVITE_JS}" defer></script>
+</body>
+</html>
+"""
+w("i/index.html", invite_html)
+
+invite_js = r"""(function () {
+  "use strict";
+  var OPEN = "%(open)s";
+  var BADGES = %(badges)s;
+  var S = {
+    en: {
+      title: "You have been invited to Hoopline GM",
+      text: "The manager code of whoever invited you:",
+      open: "Open in the app", copy: "Copy code", copied: "Code copied",
+      note: "No app yet? Install it and write this code when you create your team. Already playing? Open it and write the code in More → Friends.",
+      bad_title: "This link is missing its code",
+      bad_text: "Ask whoever invited you to share it again from Hoopline GM, in More → Friends."
+    },
+    es: {
+      title: "Te han invitado a Hoopline GM",
+      text: "El código de mánager de quien te invita:",
+      open: "Abrir en la app", copy: "Copiar código", copied: "Código copiado",
+      note: "¿Aún no tienes la app? Instálala y escribe este código al crear tu equipo. ¿Ya juegas? Ábrela y escríbelo en Más → Amigos.",
+      bad_title: "A este enlace le falta el código",
+      bad_text: "Pide a quien te ha invitado que lo comparta otra vez desde Hoopline GM, en Más → Amigos."
+    },
+    fr: {
+      title: "Vous êtes invité à Hoopline GM",
+      text: "Le code de manager de la personne qui vous invite :",
+      open: "Ouvrir dans l’app", copy: "Copier le code", copied: "Code copié",
+      note: "Pas encore l’app ? Installez-la et saisissez ce code en créant votre équipe. Vous jouez déjà ? Ouvrez-la et saisissez le code dans Plus → Amis.",
+      bad_title: "Il manque le code dans ce lien",
+      bad_text: "Demandez à la personne qui vous a invité de le partager à nouveau depuis Hoopline GM, dans Plus → Amis."
+    },
+    de: {
+      title: "Du wurdest zu Hoopline GM eingeladen",
+      text: "Der Manager-Code der Person, die dich einlädt:",
+      open: "In der App öffnen", copy: "Code kopieren", copied: "Code kopiert",
+      note: "Noch keine App? Installiere sie und gib diesen Code ein, wenn du dein Team erstellst. Du spielst schon? Öffne sie und gib den Code unter Mehr → Freunde ein.",
+      bad_title: "In diesem Link fehlt der Code",
+      bad_text: "Bitte die Person, die dich eingeladen hat, ihn in Hoopline GM unter Mehr → Freunde noch einmal zu teilen."
+    }
+  };
+
+  function $(id) { return document.getElementById(id); }
+
+  var lang = "en";
+  var prefs = navigator.languages || [navigator.language || "en"];
+  for (var i = 0; i < prefs.length; i++) {
+    var l = String(prefs[i] || "").slice(0, 2).toLowerCase();
+    if (S[l]) { lang = l; break; }
+  }
+  var T = S[lang];
+  document.documentElement.lang = lang;
+  var b = BADGES[lang];
+  $("as").src = "/assets/img/" + b.as; $("as").width = b.asw; $("as").alt = b.asa;
+  $("gp").src = "/assets/img/" + b.gp; $("gp").width = b.gpw; $("gp").alt = b.gpa;
+
+  // The same rule as the app: with or without dashes, in any case.
+  var raw = decodeURIComponent(location.pathname.replace(/^\/i\/?/, "").replace(/\/$/, ""));
+  var compact = raw.toUpperCase().replace(/-/g, "");
+  var code = /^HGM[A-Z0-9]{8}$/.test(compact)
+    ? "HGM-" + compact.slice(3, 7) + "-" + compact.slice(7) : null;
+
+  if (!code) {
+    $("t").textContent = T.bad_title;
+    $("p").textContent = T.bad_text;
+    return;
+  }
+  document.title = T.title;
+  $("t").textContent = T.title;
+  $("p").textContent = T.text;
+  $("code").textContent = code; $("code").hidden = false;
+  var open = $("open");
+  open.href = OPEN + code; open.textContent = T.open; open.hidden = false;
+  $("n").textContent = T.note;
+  var copy = $("copy");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    copy.textContent = T.copy; copy.hidden = false;
+    copy.onclick = function () {
+      navigator.clipboard.writeText(code).then(function () { copy.textContent = T.copied; });
+    };
+  }
+})();
+""" % {"open": INVITE_APP_URL, "badges": json.dumps(_inv_badges, ensure_ascii=False)}
+w(INVITE_JS, invite_js)
+
+# Enlaces universales de iOS: la app los atiende solo cuando su App ID tenga Associated Domains (y su
+# entitlement `applinks:hooplinegm.com`); hasta entonces este fichero no hace nada. Android (assetlinks.json)
+# espera a la huella SHA-256 del certificado de firma de apps de Play.
+w(".well-known/apple-app-site-association", json.dumps({
+    "applinks": {"details": [{"appIDs": [TEAM_ID + "." + BUNDLE_ID], "components": [{"/": "/i/*"}]}]}
+}, indent=2) + "\n")
+w("_redirects", "/i/* /i/index.html 200\n")
+
 # ----------------------------------------------------------------- 404, robots, sitemap, headers, favicon
 w("404.html", f'''<!doctype html>
 <html lang="en">
@@ -789,7 +924,7 @@ w("404.html", f'''<!doctype html>
 </body>
 </html>
 ''')
-w("robots.txt", f"User-agent: *\nAllow: /\nDisallow: /auth/\n\nSitemap: {SITE}/sitemap.xml\n")
+w("robots.txt", f"User-agent: *\nAllow: /\nDisallow: /auth/\nDisallow: /i/\n\nSitemap: {SITE}/sitemap.xml\n")
 urls = ""
 for l in LANGS:
     urls += f"<url><loc>{SITE}{PATH[l]}</loc>"
@@ -815,5 +950,12 @@ w("_headers", f"""/*
   Referrer-Policy: no-referrer
   Cache-Control: no-store
   X-Robots-Tag: noindex
+
+/i/*
+  Referrer-Policy: no-referrer
+  X-Robots-Tag: noindex
+
+/.well-known/apple-app-site-association
+  Content-Type: application/json
 """)
 print("ok")
