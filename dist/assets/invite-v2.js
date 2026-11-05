@@ -51,8 +51,8 @@
   $("as").src = "/assets/img/" + b.as; $("as").width = b.asw; $("as").alt = b.asa;
   $("gp").src = "/assets/img/" + b.gp; $("gp").width = b.gpw; $("gp").alt = b.gpa;
 
-  // The same rule as the app: with or without dashes, in any case.
-  var raw = decodeURIComponent(location.pathname.replace(/^\/i\/?/, "").replace(/\/$/, ""));
+  // ?c=<code>, as the app shares it; the same rule as the app: with or without dashes, in any case.
+  var raw = new URLSearchParams(location.search).get("c") || "";
   var compact = raw.toUpperCase().replace(/-/g, "");
   var code = /^HGM[A-Z0-9]{8}$/.test(compact)
     ? "HGM-" + compact.slice(3, 7) + "-" + compact.slice(7) : null;

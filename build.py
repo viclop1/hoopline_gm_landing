@@ -774,17 +774,20 @@ if LEGAL_PAGES_LIVE:
     for l in LANGS:
         w(LNPATH[l].strip("/") + "/index.html", legal_page(l))
 
-# ----------------------------------------------------------------- /i/<código>: invitación (P2, 05/11/2026)
-# Lo que comparte un mánager desde Más → Amigos es https://hooplinegm.com/i/HGM-XXXX-XXXX. Mientras no estén
+# ----------------------------------------------------------------- /i/?c=<código>: invitación (P2, 05/11/2026)
+# Lo que comparte un mánager desde Más → Amigos es https://hooplinegm.com/i/?c=HGM-XXXX-XXXX. El código va en
+# la consulta y no en la ruta a propósito: /i/ es una página normal y no hace falta ninguna regla. Con
+# `/i/* /i/index.html 200` en _redirects, Cloudflare rechazó el despliegue (05/11): quita `/index.html` de la
+# dirección, /i/ vuelve a encajar en /i/* y lo ve como un bucle; y la reescritura con 200 en Workers con assets
+# estáticos tiene casos documentados que acaban en 307. Mientras no estén
 # los enlaces universales (Associated Domains en el App ID y assetlinks.json con la huella de firma de Play),
 # esta página es el puente: el código para copiar, «Abrir en la app» (el esquema propio de la app, como en
-# /auth/confirm) y las dos tiendas. Una sola página para cualquier código (_redirects la sirve en /i/*); el
-# idioma sale del navegador. Sin la camiseta «Invitación» en el texto: la promoción puede cerrarse y la
+# /auth/confirm) y las dos tiendas. Una sola página para cualquier código; el idioma sale del navegador. Sin la camiseta «Invitación» en el texto: la promoción puede cerrarse y la
 # página no lo sabe; la app ya lo dice donde toca.
 TEAM_ID = "W9BXYM4UV9"
 BUNDLE_ID = "com.hooplinegm.app"
 INVITE_APP_URL = BUNDLE_ID + "://invite/"
-INVITE_JS = "assets/invite-v1.js"  # /assets/* es inmutable: si cambia, otro nombre
+INVITE_JS = "assets/invite-v2.js"  # /assets/* es inmutable: si cambia, otro nombre
 
 _inv_badges = {}
 for _l in LANGS:
@@ -872,8 +875,8 @@ invite_js = r"""(function () {
   $("as").src = "/assets/img/" + b.as; $("as").width = b.asw; $("as").alt = b.asa;
   $("gp").src = "/assets/img/" + b.gp; $("gp").width = b.gpw; $("gp").alt = b.gpa;
 
-  // The same rule as the app: with or without dashes, in any case.
-  var raw = decodeURIComponent(location.pathname.replace(/^\/i\/?/, "").replace(/\/$/, ""));
+  // ?c=<code>, as the app shares it; the same rule as the app: with or without dashes, in any case.
+  var raw = new URLSearchParams(location.search).get("c") || "";
   var compact = raw.toUpperCase().replace(/-/g, "");
   var code = /^HGM[A-Z0-9]{8}$/.test(compact)
     ? "HGM-" + compact.slice(3, 7) + "-" + compact.slice(7) : null;
@@ -907,7 +910,6 @@ w(INVITE_JS, invite_js)
 w(".well-known/apple-app-site-association", json.dumps({
     "applinks": {"details": [{"appIDs": [TEAM_ID + "." + BUNDLE_ID], "components": [{"/": "/i/*"}]}]}
 }, indent=2) + "\n")
-w("_redirects", "/i/* /i/index.html 200\n")
 
 # ----------------------------------------------------------------- 404, robots, sitemap, headers, favicon
 w("404.html", f'''<!doctype html>
