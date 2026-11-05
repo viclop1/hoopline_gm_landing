@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.hooplinegm.app",
+      "sha256_cert_fingerprints": [
+        "ED:74:FA:13:DC:6B:4F:5C:84:41:AC:1A:5C:5E:58:D3:53:00:0B:D1:47:C5:D6:C8:C4:90:E7:19:44:9B:63:47"
+      ]
+    }
+  }
+]

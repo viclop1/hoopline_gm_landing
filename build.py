@@ -904,9 +904,15 @@ invite_js = r"""(function () {
 """ % {"open": INVITE_APP_URL, "badges": json.dumps(_inv_badges, ensure_ascii=False)}
 w(INVITE_JS, invite_js)
 
-# Enlaces universales de iOS: la app los atiende solo cuando su App ID tenga Associated Domains (y su
-# entitlement `applinks:hooplinegm.com`); hasta entonces este fichero no hace nada. Android (assetlinks.json)
-# espera a la huella SHA-256 del certificado de firma de apps de Play.
+# Enlaces universales de iOS: Associated Domains en el App ID (05/11) y `applinks:hooplinegm.com` en los
+# entitlements de la app. App Links de Android: assetlinks.json con la huella SHA-256 del certificado de la
+# clave de FIRMA de apps de Play (no la de subida), la que firma lo que se instala desde Play: una build
+# instalada a mano no se verifica y sigue abriendo la página. Si Play cambia de clave, la nueva va aquí también.
+PLAY_SIGNING_SHA256 = ["ED:74:FA:13:DC:6B:4F:5C:84:41:AC:1A:5C:5E:58:D3:53:00:0B:D1:47:C5:D6:C8:C4:90:E7:19:44:9B:63:47"]
+w(".well-known/assetlinks.json", json.dumps([{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {"namespace": "android_app", "package_name": BUNDLE_ID, "sha256_cert_fingerprints": PLAY_SIGNING_SHA256},
+}], indent=2) + "\n")
 w(".well-known/apple-app-site-association", json.dumps({
     "applinks": {"details": [{"appIDs": [TEAM_ID + "." + BUNDLE_ID], "components": [{"/": "/i/*"}]}]}
 }, indent=2) + "\n")
@@ -958,6 +964,9 @@ w("_headers", f"""/*
   X-Robots-Tag: noindex
 
 /.well-known/apple-app-site-association
+  Content-Type: application/json
+
+/.well-known/assetlinks.json
   Content-Type: application/json
 """)
 print("ok")
