@@ -47,7 +47,8 @@ section { position: relative; }
 
 /* cabecera */
 .top { display: flex; align-items: center; justify-content: space-between; padding-block: 8px; }
-.brand { font: 700 1.375rem/1 var(--display); letter-spacing: -0.01em; text-decoration: none; padding-block: 14px; }
+.brand { font: 700 1.375rem/1 var(--display); letter-spacing: -0.01em; text-decoration: none; padding-block: 14px; display: inline-flex; align-items: center; gap: 10px; }
+.brand-icon { width: 28px; height: 28px; border-radius: 7px; display: block; }
 .langs { display: flex; gap: 2px; }
 .langs a { padding: 13px 13px; border-radius: var(--r-btn); color: var(--muted); font-size: 0.875rem; font-weight: 600; text-decoration: none; }
 .langs a:hover { color: var(--text); }

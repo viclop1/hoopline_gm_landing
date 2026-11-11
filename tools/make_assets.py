@@ -62,7 +62,7 @@ for lang in LANGS:
         im.save(os.path.join(OUT, "img", f"{lang}-{k}-{W}-{TAG}.webp"), quality=78, method=6)
 
 # --- imagen para redes (1200x630, una por idioma): solo con --og. Mismo escenario que la web: fondo ink, luz violeta, titular Archivo, móvil con degradado.
-OG_TAG = "v2"
+OG_TAG = "v3"
 OG = {  # (titular en dos líneas, texto en dos líneas)
     "en": (("Every bid", "in the open"), ("Draft, bid and build a basketball team.", "A manager game where nothing is hidden.")),
     "es": (("Cada puja,", "a la vista"), ("Draftea, puja y arma tu equipo de baloncesto.", "Un mánager sin trampas ocultas.")),
@@ -81,7 +81,10 @@ if a.og:
         glow = glow.filter(__import__("PIL.ImageFilter", fromlist=["GaussianBlur"]).GaussianBlur(90))
         base.paste(Image.new("RGBA", (Wd, Ht), "#8B7BFF"), (0, 0), glow)
         d = ImageDraw.Draw(base)
-        d.text((72, 64), "Hoopline GM", font=F("Archivo-Bold.ttf", 34), fill="#F2F5F8")
+        icon = Image.open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "app-icon-1024.png")).convert("RGBA").resize((64, 64), Image.LANCZOS)
+        im_mask = Image.new("L", (256, 256), 0); ImageDraw.Draw(im_mask).rounded_rectangle((0, 0, 255, 255), radius=56, fill=255)
+        icon.putalpha(im_mask.resize((64, 64), Image.LANCZOS)); base.alpha_composite(icon, (72, 52))
+        d.text((152, 64), "Hoopline GM", font=F("Archivo-Bold.ttf", 34), fill="#F2F5F8")
         hs = min(fit(d, t, "Archivo-Bold.ttf", 100, MAXW).size for t in h)
         d.text((72, 190), h[0], font=F("Archivo-Bold.ttf", hs), fill="#F2F5F8")
         d.text((72, 190 + round(hs * 1.1)), h[1], font=F("Archivo-Bold.ttf", hs), fill="#F2F5F8")

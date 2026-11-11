@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Genera los iconos de la web (favicon.ico, favicon-32.png, icon-192.png, apple-touch-icon.png) desde tools/app-icon-1024.png.
+"""Genera los iconos de la web (favicon.ico, favicon-32.png, icon-192.png, apple-touch-icon.png, assets/img/brand-icon-v2.png) desde tools/app-icon-1024.png.
 
 Uso:  python3 tools/make_icons.py        (requiere Pillow)
 Para cambiar el icono: sustituye tools/app-icon-1024.png por el nuevo (1024x1024) y vuelve a ejecutarlo.
@@ -24,4 +24,6 @@ rounded(192).save(os.path.join(OUT, "icon-192.png"), optimize=True)
 # iOS aplica sus propias esquinas: cuadrado y opaco
 src.resize((180, 180), Image.LANCZOS).save(os.path.join(OUT, "apple-touch-icon.png"), optimize=True)
 rounded(48).save(os.path.join(OUT, "favicon.ico"), sizes=[(16, 16), (32, 32), (48, 48)])
+# icono del encabezado (28 px a 2x); lleva etiqueta porque /assets/ se cachea un año
+rounded(56).save(os.path.join(OUT, "assets", "img", "brand-icon-v2.png"), optimize=True)
 print("iconos ok")

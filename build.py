@@ -357,7 +357,7 @@ def landing(lang):
     c = COPY[lang]
     canonical = SITE + PATH[lang]
     ld = {
-        "@context": "https://schema.org", "@type": "MobileApplication", "name": "Hoopline GM",
+        "@context": "https://schema.org", "@type": "MobileApplication", "name": "Hoopline GM", "image": SITE + "/icon-192.png",
         "operatingSystem": "iOS, Android", "applicationCategory": "GameApplication",
         "description": c["desc"], "url": canonical, "downloadUrl": [APP_STORE, PLAY_STORE], "inLanguage": lang,
         "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
@@ -370,7 +370,7 @@ def landing(lang):
 <meta property="og:description" content="{e(c["desc"])}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:locale" content="{OG_LOCALE[lang]}">
-<meta property="og:image" content="{SITE}/assets/og-{lang}-v2.png">
+<meta property="og:image" content="{SITE}/assets/og-{lang}-v3.png">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 '''
@@ -420,7 +420,7 @@ def landing(lang):
 <body>
 <a class="skip" href="#main">{e({"en":"Skip to content","es":"Saltar al contenido","de":"Zum Inhalt springen","fr":"Aller au contenu"}[lang])}</a>
 <header class="top wrap">
-<a class="brand" translate="no" href="{PATH[lang]}" aria-label="{e(c["home_label"])}">Hoopline GM</a>
+<a class="brand" translate="no" href="{PATH[lang]}" aria-label="{e(c["home_label"])}"><img class="brand-icon" src="/assets/img/brand-icon-v2.png" width="28" height="28" alt="" aria-hidden="true">Hoopline GM</a>
 <nav class="langs" aria-label="{e(c["lang_label"])}">{switch}</nav>
 </header>
 <main id="main">
@@ -496,7 +496,7 @@ confirm_html = f'''<!doctype html>
 <head>
 {AUTH_HEAD}</head>
 <body class="auth">
-<header class="top wrap"><a class="brand" translate="no" href="/">Hoopline GM</a></header>
+<header class="top wrap"><a class="brand" translate="no" href="/"><img class="brand-icon" src="/assets/img/brand-icon-v2.png" width="28" height="28" alt="" aria-hidden="true">Hoopline GM</a></header>
 <main class="auth-main wrap">
 <div class="auth-card" id="card" aria-live="polite">
 <h1 id="t"></h1>
@@ -753,7 +753,7 @@ def legal_page(lang):
 <body>
 <a class="skip" href="#main">{e(skip)}</a>
 <header class="top wrap">
-<a class="brand" translate="no" href="{PATH[lang]}" aria-label="{e(c["home_label"])}">Hoopline GM</a>
+<a class="brand" translate="no" href="{PATH[lang]}" aria-label="{e(c["home_label"])}"><img class="brand-icon" src="/assets/img/brand-icon-v2.png" width="28" height="28" alt="" aria-hidden="true">Hoopline GM</a>
 <nav class="langs" aria-label="{e(c["lang_label"])}">{switch}</nav>
 </header>
 <main id="main" class="legal-doc wrap">
@@ -802,7 +802,7 @@ invite_html = f"""<!doctype html>
 <head>
 {INVITE_HEAD}</head>
 <body class="auth">
-<header class="top wrap"><a class="brand" translate="no" href="/">Hoopline GM</a></header>
+<header class="top wrap"><a class="brand" translate="no" href="/"><img class="brand-icon" src="/assets/img/brand-icon-v2.png" width="28" height="28" alt="" aria-hidden="true">Hoopline GM</a></header>
 <main class="auth-main wrap">
 <div class="auth-card" aria-live="polite">
 <h1 id="t"></h1>
@@ -923,7 +923,7 @@ w("404.html", f'''<!doctype html>
 <head>
 {head_common("en", "Hoopline GM", "Hoopline GM", SITE + "/", '<meta name="robots" content="noindex">')}</head>
 <body class="auth">
-<header class="top wrap"><a class="brand" translate="no" href="/">Hoopline GM</a></header>
+<header class="top wrap"><a class="brand" translate="no" href="/"><img class="brand-icon" src="/assets/img/brand-icon-v2.png" width="28" height="28" alt="" aria-hidden="true">Hoopline GM</a></header>
 <main class="auth-main wrap"><div class="auth-card">
 <h1>404</h1>
 <p>This page does not exist. · Esta página no existe. · Diese Seite gibt es nicht. · Cette page n’existe pas.</p>
