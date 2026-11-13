@@ -925,6 +925,11 @@ w(".well-known/apple-app-site-association", json.dumps({
     "applinks": {"details": [{"appIDs": [TEAM_ID + "." + BUNDLE_ID], "components": [{"/": "/i/*"}]}]}
 }, indent=2) + "\n")
 
+# app-ads.txt (13/11): AdMob verifica las apps (Android e iOS) con este archivo en la raíz del dominio que
+# figura como web del desarrollador en Google Play y en la App Store. ID de editor de la cuenta de AdMob.
+ADMOB_PUBLISHER_ID = "pub-6827236613231756"
+w("app-ads.txt", f"google.com, {ADMOB_PUBLISHER_ID}, DIRECT, f08c47fec0942fa0\n")
+
 # ----------------------------------------------------------------- 404, robots, sitemap, headers, favicon
 w("404.html", f'''<!doctype html>
 <html lang="en">
